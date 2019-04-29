@@ -1,0 +1,520 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>EditorMD</title>
+    <link rel="stylesheet" type="text/css" href="../static/plug-ins/lib/codemirror/codemirror.min.css"/>
+    <script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../static/plug-ins/editormd.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/plug-ins/css/editormd.css"/>
+    <link rel="stylesheet" href="../layui/css/layui.css"/>
+    <script src="../layui/layui.js"></script>
+
+
+</head>
+
+<body>
+<div class="layui-row">
+    <div class="layui-header">
+
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <div class="header_centent">
+            <i class="layui-icon" style="float: left">&#xe653;</i>
+        </div>
+
+        <ul class="layui-nav layui-layout-right" id="userinfo">
+
+        </ul>
+    </div>
+</div>
+<div class="layui-row">
+    <div class="layui-container">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">写博客</li>
+            </ul>
+            <div class="layui-tab-content" style="height: 100px;">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-col-md layui-col-md-offset1">
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-row">
+                                <div class="layui-input-block"
+                                     style="width: 80%;margin-left: 103px; margin-bottom: 13px;">
+                                    <input type="text" name="title" id="title" required lay-verify="required" placeholder="请输入标题"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <!--<div id="editormd" style="display:block;visibility: visible; width: 80% !important;height: 500px;">-->
+                            <!--<textarea style="display:none; height: auto">### Hello Editor.md !-->
+
+
+                            <!--</textarea>-->
+                            <!--</div>-->
+
+                            <div class="editormd" id="test-editormd">
+                                <textarea class="editormd-markdown-textarea"
+                                          name="test-editormd-markdown-doc" id="md"></textarea>
+                                <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
+                                <textarea class="editormd-html-textarea" name="text" id="html"></textarea>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="layui-col-md5 layui-col-md-offset2">
+
+                        <div class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo"
+                             id="sendblog">发布
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-row">
+
+    </div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+    var uri = "localhost:8080";
+
+    var md=$("#md");
+    var html=$("#html");
+    function getCookie (name) {
+        if (document.cookie.length > 0) {
+            var begin = document.cookie.indexOf(name + '=')
+            if (begin !== -1) {
+                begin += name.length + 1 // cookie值的初始位置
+                var end = document.cookie.indexOf(';', begin) // 结束位置
+                if (end === -1) {
+                    end = document.cookie.length // 没有;则end为字符串结束位置
+                }
+                return unescape(document.cookie.substring(begin, end))
+            }
+        }
+        return null
+        // cookie不存在返回null
+    }
+    var cookieid=getCookie("cookieid");
+    $(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "/blog/view/article/"+cookieid,
+            dataType: "json",
+            sync:false,
+            success: function (data) {
+                var blog=data.data;
+                if (data.code=="200"){
+                    $("#md").text(blog.c_md);
+                    $("#html").text(blog.c_content);
+                    $("#title").val(blog.c_title);
+                   /* $("#time").text(blog.c_time);
+                    $("#value").text(blog.c_value);
+                    mdToHml(blog.c_content);*/
+                   //md init
+                    editormd("test-editormd", {
+                        width: "90%",
+                        height: 640,
+                        syncScrolling: "single",
+                        //你的lib目录的路径，我这边用JSP做测试的
+                        path: "../static/plug-ins/lib/",
+                        //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+                        imageUpload: true,
+                        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                        imageUploadURL: "/uploadfile",
+                        saveHTMLToTextarea: true
+                    });
+
+                }
+            }})
+        //getSelect();
+
+        function delCookie (name) {
+            var exp = new Date()
+            exp.setTime(exp.getTime() - 1)
+            var cval = setCookie(name)
+            if (cval && cval != null) {
+                document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+            }
+        }
+
+        layui.use('form', function () {
+            var form = layui.form;
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                $.ajax({
+                    type: "PUT",
+                    url: "/blog/"+cookieid,
+                    data: data.field,
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var link="http://" + uri + "view/" + data.data;
+                        if (data.code == "200") {
+                            layer.msg('发布成功', {
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                delCookie("cookieid");
+                                window.location.href = link;
+                            });
+
+
+                            //layer.open(uri+"/index");
+                        } else {
+                            layer.msg("发布失败");
+                        }
+
+
+                    }
+                });
+                return false;
+            });
+            /*form.on('select(choosebq)', function (data) {
+                console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象
+                var elem = data.elem;
+                var i;
+                var title;
+                for (i = 0; i < elem.length; i++) {
+                    if (elem[i].value == data.value) {
+                        title = elem[i].text;
+                        break;
+                    }
+                }
+                //$("#choosebq")[0].options.remove(i);//删除选择后的节点
+                $("dd[lay-value='" + data.value + "']")[0].style.display = 'none';
+                if (data.value != "") {
+                    // $("#addbq").addClass(" layui-btn-disabled");
+                    addCategoryBySelect(data.value, title);
+                    //data.elem.removeChild()
+                }
+            });
+            //监听文章类别，级联操作
+
+            form.on('select(select_parent)', function(data){
+                console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象
+                changeSonselect(data.value,form);
+                form.render('select');
+                form.render('select');
+                form.render();
+                var interval = setInterval(function(){
+                    form.render('select');
+                    if (flagson){
+                        clearInterval(interval);
+                    }
+                }, 1300);
+
+
+                // setInterval(function () {
+                //
+                // },1500)
+
+            });
+            form.on('select(select_second)', function(data) {
+                flagson=true;
+            });*/
+        });
+        //监听徐赞泽器
+
+
+    });
+</script>
+
+<script>
+    //动态渲染级联下拉框
+    function changeSonselect(pid,form){
+        var sonNode=$("#categoryselect2");
+        $.ajax({
+            type: "GET",
+            url: "/blog/category/",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function (data) {
+                var list = data.data;
+                var htmloptions="";
+                for (var i in list) {
+                    if (list[i].pid==pid){
+                        var childlist=list[i].childList;
+                        for (var j in childlist){
+                            if (j==0){
+                                htmloptions+="<option selected value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
+                            }
+                            else
+                                htmloptions+="<option value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
+                        }
+                    }
+                }
+                sonNode.html(htmloptions);
+
+            }
+        });
+        layui.use('form', function () {
+            var form = layui.form;
+            form.render('select');
+        });
+    }
+    function addCategoryBySelect(code, title) {
+        var catetext = $("#category");
+        var catelist = $("#catelist");
+        var newinput = document.createElement("input");
+        //var inputval = catetext.val();
+
+        //var count="category"+sum;
+        newinput.type = "checkbox";
+        newinput.name = code;
+        newinput.title = title;
+        newinput.checked = true;
+
+        var newdiv = document.createElement("div");
+        var newspan = document.createElement("span");
+        var newi = document.createElement("i");
+        var iclick = document.createElement("i");
+        // newdiv.addclass("layui-unselect layui-form-checkbox layui-form-checked");
+        newdiv.id = code;
+        newdiv.name = "cateflag";
+        //newdiv.onclick=changeSelect(this);
+        newspan.append(title);
+        newi.class = "layui-icon";
+        newi.append("✔");
+
+        newi.id = "i" + code;
+        iclick.name = code;
+        catelist[0].appendChild(newinput);
+        catelist[0].appendChild(newdiv);
+        var newNode = $("#" + code)[0];
+        newNode.appendChild(newspan);
+        newNode.appendChild(newi);
+        $("#" + code).addClass("layui-unselect layui-form-checkbox layui-form-checked");
+        //  $("#"+count).value="50";
+        //$("#"+count ).children('i')[0].class='layui-icon-ok';
+        $("#i" + code).addClass('layui-icon layui-icon-ok');
+        $("#" + code).click(function () {
+            catelist[0].removeChild(this);
+            //var eleinputname="input[name=]"
+            catelist[0].removeChild($("input[name='" + this.id + "']")[0]);
+            $("dd[lay-value='" + code + "']")[0].style.display = '';
+            // $("#addbq").removeClass(" layui-btn-disabled");
+        });
+    }
+
+    var sum = 0;
+
+    //添加标签节点
+    function addCategory(bq) {
+        var catetext = $("#category");
+        var catelist = $("#catelist");
+        var newinput = document.createElement("input");
+        var inputval = catetext.val();
+        if (inputval == "") {
+            layer.msg('您的标签是空的', {icon: 5});
+            return;
+        }
+        var count = "category" + sum;
+        newinput.type = "checkbox";
+        newinput.name = bq + sum + "," + inputval;
+        newinput.title = catetext.val();
+        newinput.checked = true;
+
+        var newdiv = document.createElement("div");
+        var newspan = document.createElement("span");
+        var newi = document.createElement("i");
+        var iclick = document.createElement("i");
+        // newdiv.addclass("layui-unselect layui-form-checkbox layui-form-checked");
+        newdiv.id = count;
+        newdiv.name = "cateflag";
+        //newdiv.onclick=changeSelect(this);
+        newspan.append(catetext.val());
+        newi.class = "layui-icon";
+        newi.append("✔");
+
+        newi.id = "i" + count;
+        iclick.name = count;
+        catelist[0].appendChild(newinput);
+        catelist[0].appendChild(newdiv);
+        var newNode = $("#" + count)[0];
+        newNode.appendChild(newspan);
+        newNode.appendChild(newi);
+        $("#" + count).addClass("layui-unselect layui-form-checkbox layui-form-checked");
+        //  $("#"+count).value="50";
+        //$("#"+count ).children('i')[0].class='layui-icon-ok';
+        $("#i" + count).addClass('layui-icon layui-icon-ok');
+        $("#" + count).click(function () {
+            catelist[0].removeChild(this);
+            //var eleinputname="input[name=]"
+            catelist[0].removeChild($("input[name=" + this.id + "]"));
+            sum--;
+        });
+        sum++;
+
+
+    }
+
+    /*  function send() {
+          var div = $("#editormd");
+          var v = div[0];
+          var m = v.children[3].innerHTML;
+
+          /!*console.log(m.innerHTML);*!/
+          $.ajax({
+              type: "POST",
+              url: "/blog/save",
+              data: m,
+              dataType: "json",
+              success: function (data) {
+
+              }
+          })
+      }*/
+    //监听元素
+
+    /*$(document).on("click", "a[title='添加图片']", function(event){
+        console.log("test");
+    });
+
+
+
+    var org='';
+    var state=$(".editormd-dialog-header").css("style"); // 要监听元素
+    setInterval(function () {
+        if (state != undefined) {
+            org = state;
+            console.log(state);
+        }
+    }, 2000);*/
+
+</script>
+<script>
+    window.onlaod = function () {
+
+        $(".CodeMirror").css({
+            'heigth': 'auto'
+        });
+        var div = $("#editormd");
+        var v = div[0];
+        var m = v.children[3];
+        console.log(m.innerHTML);
+    };
+</script>
+<script>
+    //JavaScript代码区域
+    var uri = "localhost:8080/";
+
+    window.onload = function () {
+
+        //异步加载首页导航栏
+        var url = "category";
+        var strhtml = "<ul class=\"layui-nav\" lay-filter=\"\" >"+"<li class=\"layui-nav-item\" id=\"index\" ><a href=\"/index\">首页</a></li>";
+
+        //alert("");
+        $.ajax({
+            type: "GET",
+            url: "/blog/category/",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function (data) {
+                var list = data.data;
+                for (var i in list) {
+                    var categoryid;
+                    strhtml += "<li class='layui-nav-item'><a onclick=\"setCookie('categoryid','"+list[i].pid+"')\"  href='/blog/viewlink'>" + list[i].pname + "</a>";
+                    if (list[i].childList != null) {
+                        strhtml += "<dl class=\"layui-nav-child\"> <!-- 二级菜单 -->";
+                        var childlist = list[i].childList;
+                        for (var j in childlist) {
+                            strhtml += "<dd><a onclick=\"setCookie('categoryid','"+childlist[j].sid+"')\" href=\"/blog/viewlink\">" + childlist[j].sname + "</a></dd>";
+                        }
+                        strhtml += "</dl>";
+                    }
+                }
+                strhtml += "</li></ul>";
+               // indexViewTab(list);
+                userinfo();
+                $(".header_centent").html(strhtml);
+                init();
+            }
+        });
+    }
+
+
+    //
+    /*function userLogin() {
+        $.ajax({
+            type: "GET",
+            url: "/user/login",
+            /!*data: {username:$("#username").val(), content:$("#content").val()},*!/
+            dataType: "json",
+            success: function(data){
+
+            }
+
+    }*/
+
+    /*导航栏右上的用户信息状态*/
+    function userinfo() {
+        var strhtml=" <li class=\"layui-nav-item\"><a href=\"/blog/write\">写博客</a></li>"
+            +"<li class=\"layui-nav-item\"><a href=\"/message \">留言</a></li>";
+        $.ajax({
+            type: "GET",
+            url: "/user/cookie",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function(data){
+                if("200"==data.code){
+                    var jsondata=data.data;
+                    strhtml+=" <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\"/user/userinfo\">\n"+ jsondata.cName +
+                        "            <img src=\""+ jsondata.cImgAdr+"\" class=\"layui-nav-img\"> </a>\n" +
+                        /*"            <dl class=\"layui-nav-child\">\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/"+jsondata.id+"\">基本资料</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/blog/"+jsondata.id+"\">我的博客</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/comment/"+jsondata.id+"\">我的评论</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/password/"+jsondata.id+"\">密码修改</a>\n" +
+                        "            </dd>\n" +
+                        "            </dl>\n" +*/
+                        "            </li>\n" +
+                        "            <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\""+"/user/logout"+"\">退了</a>\n" +
+                        "            </li>";
+
+                }
+                else {
+                    strhtml+="<li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\""+""+"/blog/login"+"\">登录</a>\n" +
+                        "                                <li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\"/user/register\">注册</a>\n" +
+                        "                                </li>"
+                }
+                $("#userinfo").html(strhtml);
+            }
+        });
+    }
+
+    function init() {
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    }
+</script>
+</body>
+
+</html>

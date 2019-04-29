@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../layui/layui.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" />
+    <script src="../static/js/jquery-1.8.3.min.js">
+
+
+        // $(function () {});
+    </script>
+</head>
+
+<body style="background-color: #eeeeee;">
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <div class="header_centent" style="float: left" >
+            <!--<ul class="layui-nav" lay-filter="" >
+                <li class="layui-nav-item"><a href="">最新活动</a></li>
+                <li class="layui-nav-item layui-this"><a href="">产品</a></li>
+                <li class="layui-nav-item"><a href="">大数据</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">解决方案</a>
+                    <dl class="layui-nav-child"> &lt;!&ndash; 二级菜单 &ndash;&gt;
+                        <dd><a href="">移动模块</a></dd>
+                        <dd><a href="">后台模版</a></dd>
+                        <dd><a href="">电商平台</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">社区</a></li>
+            </ul>-->
+
+        </div>
+
+        <ul class="layui-nav layui-layout-right" id="userinfo" >
+
+        </ul>
+    </div>
+    <div class="layui-container "  >
+        <div class="layui-row ">
+            <div class=" layui-col-md8 layui-col-md-offset2 " >
+                <div class="layui-tab layui-tab-brief" lay-filter="infotabfilter">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本资料</li>
+                    <li>我的博客</li>
+                    <li>我的评论</li>
+                    <li>密码修改</li>
+
+                </ul>
+                <div class="layui-tab-content" style="height: 100px;">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form layui-form-pane" action="" lay-filter="updateuser">
+                            <!-- <div class="layui-form-item">
+                                 <label class="layui-form-label">用户名</label>
+                                 <div class="layui-input-block">
+                                     <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                                 </div>
+                             </div>-->
+                            <!-- <div class="layui-form-item">
+                                 <label class="layui-form-label">密码</label>
+                                 <div class="layui-input-block">
+                                     <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                 </div>
+                             </div>-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">昵称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="alias" name="alias" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">生日日期</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="date" id="date" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--<div class="layui-form-item" pane="">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="sex" value="1" title="男" checked="">
+                                    <input type="radio" name="sex" value="0" title="女">
+                                </div>
+                            </div>-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">头像</label>
+
+                                <div class="layui-upload">
+                                    <button type="button" class="layui-btn layui-inline" id="test1">修改头像</button>
+                                    <div class="layui-upload-list">
+                                        <img class="layui-upload-img" name="img" id="img">
+                                        <p id="demoText"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">个人简介</label>
+                                <div class="layui-input-block">
+                                    <textarea placeholder="请输入内容" name="jj" id="jj" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-submit="" lay-filter="formDemo" >确认修改</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-container" id="mybloglist">
+                    </div>
+                    <div class="layui-tab-item"></div>
+                    <div class="layui-tab-item" id="updatepsw">
+                        <form class="layui-form layui-col-md8 layui-form-pane" action="" lay-filter="updatepsw">
+                            <!-- <div class="layui-form-item">
+                                 <label class="layui-form-label">用户名</label>
+                                 <div class="layui-input-block">
+                                     <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                                 </div>
+                             </div>-->
+                             <div class="layui-form-item">
+                                 <label class="layui-form-label">原密码</label>
+                                 <div class="layui-input-block">
+                                     <input type="password" name="oldpassword" placeholder="请输入原始密码" autocomplete="off" class="layui-input">
+                                 </div>
+                             </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">新密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="newpassword" placeholder="请输入新的密码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-submit="" lay-filter="pswbtu" >确认修改</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+
+    </div>
+  <!--  <div class="layui-body" style="background-color: #eeeeee;">
+        &lt;!&ndash; 内容主体区域 &ndash;&gt;
+        <div class="layui-card">
+            <div class="layui-card-header">卡片面板</div>
+            <div class="layui-card-body">
+                卡片式面板面板通常用于非白色背景色的主体内<br>
+                从而映衬出边框投影
+            </div>
+        </div>
+
+    </div>-->
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+</div>
+<script>
+
+</script>
+<script>
+    var id="";//userid
+    var bid="";//blogid
+    //JavaScript代码区域
+    var uri="localhost:8080/";
+
+    window.onload=function() {
+
+        //异步加载首页导航栏
+        var url = "category";
+        var strhtml = "<ul class=\"layui-nav\" lay-filter=\"\" >"+"<li class=\"layui-nav-item\" id=\"index\" ><a href=\"/index\">首页</a></li>";
+
+        //alert("");
+        $.ajax({
+            type: "GET",
+            url: "/blog/category/",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function (data) {
+                var list = data.data;
+                for (var i in list) {
+                    var categoryid;
+                    strhtml += "<li class='layui-nav-item'><a onclick=\"setCookie('categoryid','"+list[i].pid+"')\"  href='/blog/viewlink'>" + list[i].pname + "</a>";
+                    if (list[i].childList != null) {
+                        strhtml += "<dl class=\"layui-nav-child\"> <!-- 二级菜单 -->";
+                        var childlist = list[i].childList;
+                        for (var j in childlist) {
+                            strhtml += "<dd><a onclick=\"setCookie('categoryid','"+childlist[j].sid+"')\" href=\"/blog/viewlink\">" + childlist[j].sname + "</a></dd>";
+                        }
+                        strhtml += "</dl>";
+                    }
+                }
+                strhtml += "</li></ul>";
+                //indexViewTab(list);
+                userinfo();
+                $(".header_centent").html(strhtml);
+                init();
+            }
+        });
+    }
+
+
+    //
+    /*function userLogin() {
+        $.ajax({
+            type: "GET",
+            url: "/user/login",
+            /!*data: {username:$("#username").val(), content:$("#content").val()},*!/
+            dataType: "json",
+            success: function(data){
+
+            }
+
+    }*/
+
+    /*导航栏右上的用户信息状态*/
+    function userinfo() {
+        var strhtml=" <li class=\"layui-nav-item\"><a href=\"/blog/write\">写博客</a></li>"
+            +"<li class=\"layui-nav-item\"><a href=\"/message \">留言</a></li>";
+        $.ajax({
+            type: "GET",
+            url: "/user/cookie",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function(data){
+                if("200"==data.code){
+                    var jsondata=data.data;
+                    id=jsondata.id;
+                    strhtml+=" <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\"/user/userinfo\">\n"+ jsondata.cName +
+                        "            <img src=\""+ jsondata.cImgAdr+"\" class=\"layui-nav-img\"> </a>\n" +
+                        /*"            <dl class=\"layui-nav-child\">\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/"+jsondata.id+"\">基本资料</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/blog/"+jsondata.id+"\">我的博客</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/comment/"+jsondata.id+"\">我的评论</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/password/"+jsondata.id+"\">密码修改</a>\n" +
+                        "            </dd>\n" +
+                        "            </dl>\n" +*/
+                        "            </li>\n" +
+                        "            <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\""+"/user/logout"+"\">退了</a>\n" +
+                        "            </li>";
+
+                }
+                else {
+                    strhtml+="<li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\""+""+"/blog/login"+"\">登录</a>\n" +
+                        "                                <li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\"/user/register\">注册</a>\n" +
+                        "                                </li>"
+                }
+                $("#userinfo").html(strhtml);
+            }
+        });
+    }
+    function init() {
+
+
+        layui.use(['element', 'laydate', 'upload','form'], function () {
+            var element = layui.element
+                , layer = layui.layer
+                , laydate = layui.laydate;
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            var form = layui.form;
+            var inituser;
+
+            //监听tab切换数据展示
+            element.on('tab(infotabfilter)', function(data){
+                if (data.index==1){
+                    getMyBlogList(id);
+                }
+                else if (data.index==2){
+                    getMyCommentList(id);
+                }
+                else if (data.index==3){
+                    $("#mybloglist").html($("#updatepsw").html());
+                }
+                /*console.log(this); //当前Tab标题所在的原始DOM元素
+                console.log(data.index); //得到当前Tab的所在下标
+                console.log(data.elem); //得到当前的Tab大容器*/
+            });
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#test1'
+                , url: '/user/upload'
+                , multiple: true
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code != "200") {
+                        return layer.msg('上传失败', {
+                            icon: 2
+                        });
+                    }
+                    return layer.msg('上传成功', {
+                        icon: 1
+                    }, function () {
+                        // $('#demo1').attr('src', res.data.url);
+                        path += res.data.url;
+                    });
+
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            });
+            //日期
+            laydate.render({
+                elem: '#birthdate'
+            });
+
+
+            $.ajax({
+                type: "GET",
+                url: "/user/cookie",
+                //async:false,//设置同步更新
+                /*data: {username:$("#username").val(), content:$("#content").val()},*/
+                dataType: "json",
+                success: function (data) {
+                    inituser=data.data;
+                   /* form.val("updateuser", {
+
+                        "alias": inituser.cAlias // "name": "value"
+                        , "date": inituser.cTime
+                        , "img": inituser.cImgAdr
+                        , "jj": inituser.cJj
+
+                    });*/
+                    $("#alias").val(inituser.cAlias);
+                    $("#date").val(inituser.cTime);
+                    $("#img")[0].src=inituser.cImgAdr;
+                    $("#jj").val(inituser.cJj);
+
+                }
+
+            });
+            // $.ajax({
+            //     type: "GET",
+            //     url: "/user/"+inituser.id+"",
+            //    // data: data.field,
+            //     dataType: "json",
+            //     success: function(data){
+            //
+            //     }
+            // })
+            //formTest 即 class="layui-form" 所在元素对应的 lay-filter="" 对应的值
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                data.field.file = path;
+                layer.msg(JSON.stringify(data.field));
+                $.ajax({
+                    type: "PUT",
+                    url: "/user/updata/psw/"+id,
+                    data: data.field,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == "200") {
+                            layer.msg('修改成功', {
+                                icon: 1,
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                path = "";//并发影响
+                                window.location.href = "/user/userinfo";
+                            });
+
+
+                            //layer.open(uri+"/index");
+                        } else {
+                            layer.msg(data.data);
+                        }
+
+
+                    }
+                });
+                return false;
+            });
+
+            //修改密码
+            form.on('submit(pswbtu)', function (data) {
+                data.field.file = path;
+                layer.msg(JSON.stringify(data.field));
+                $.ajax({
+                    type: "POST",
+                    url: "/user/updata/"+id+"",
+                    data: data.field,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == "200") {
+                            layer.msg('修改成功', {
+                                icon: 1,
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                path = "";//并发影响
+                                window.location.href = "/userinfo";
+                            });
+
+
+                            //layer.open(uri+"/index");
+                        } else {
+                            layer.msg("修改失败");
+                        }
+
+
+                    }
+                });
+                return false;
+            });
+        });
+
+        function getMyBlogList(id) {
+            $.ajax({
+                type: "GET",
+                url: "/user/info/blog/"+id,
+                // data: page,
+                dataType: "json",
+                success: function (data) {
+
+                    if (data.code="200"){
+                        var list= data.data;
+                        var str="";
+                        for (var i in list){
+                            bid=list[i].id;
+                            // setCookie("cookieid",bid);
+
+
+                           str+= " <div class=\"layui-row\" >\n" +
+                            "                                <div class=\"layui-col-md7\">\n" +
+                            "                                    <div class=\"layui-card\">\n" +
+                            "                                        <div class=\"layui-card-header\">\n" +
+                            "                                            <h3><a href=\"/view/"+bid+"\">\n" +
+                            "                                                "+list[i].cTitle+"\n" +
+                            "                                            </a></h3>\n" +
+                            "                                            <div class=\"layui-btn-group layui-layout-right\">\n" +
+                            "                                                <button class=\"layui-btn layui-btn-primary layui-btn-sm\" >\n" +
+                            "                                                    <a href=\"/blog/edit\" onclick=\"setCookie('cookieid','"+bid+"')\" >\n" +
+                            "                                                        <i class=\"layui-icon\">&#xe642;</i>\n" +
+                            "                                                    </a>\n" +
+                            "                                                </button>\n" +
+                            "                                                <button class=\"layui-btn layui-btn-primary layui-btn-sm\">\n" +
+                            "                                                    <a href=\"/blog/del/"+bid+"\">\n" +
+                            "                                                    <i class=\"layui-icon\">&#xe640;</i>\n" +
+                            "                                                    </a>\n" +
+                            "                                                </button>\n" +
+                            "                                            </div>\n" +
+                            "                                        </div>\n" +
+                            "                                    </div>\n" +
+                            "                                </div>\n" +
+                            "                            </div>\n" +
+                            "                        </div>";
+                        }
+                        $("#mybloglist").html(str);
+                    }
+
+                }})
+
+
+        }
+        function getMyCommentList(id) {
+            $.ajax({
+                type: "GET",
+                url: "/blog/comment/user/"+id,
+                // data: page,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code="200"){
+                        var list= data.data;
+                        var str="";
+                        for (var i in list){
+                            //bid=list[i].bid;
+                            // setCookie("cookieid",bid);
+
+
+                            str+= " <div class=\"layui-row\" >\n" +
+                                "                                <div class=\"layui-col-md7\">\n" +
+                                "                                    <div class=\"layui-card\">\n" +
+                                "                                        <div class=\"layui-card-header\">\n" +
+                                "                                            <h3><a href=\"/view/"+list[i].bid+"\">\n" +
+                                "                                                回复主题："+list[i].title+"\n" +
+                                "                                            </a></h3>\n" + "</div>\n" +
+
+                                "                                            <div class=\"layui-card-body\">\n" +
+                                "            <div class=\"layui-row\">\n回复内容：" +list[i].content+
+                                "                <div class=\"layui-layout-right\">\n日期&nbsp" +list[i].time+
+                                "                </div> </div></div></div></div></div>";
+                        }
+                        $("#mybloglist").html(str);
+                    }
+                }})
+        }
+
+    }
+
+    //设置cookie
+    function setCookie(name, value, seconds) {
+        seconds = 180;   //seconds有值就直接赋值，没有为0，这个根php不一样。
+        var expires = "";
+        if (seconds != 0 ) {      //设置cookie生存时间
+            var date = new Date();
+            date.setTime(date.getTime()+(seconds*1000));
+            expires = "; expires="+date.toGMTString();
+        }
+        document.cookie = name+"="+escape(value)+expires+"; path=/";   //转码并赋值
+    }
+        function delCookie (name) {
+            var exp = new Date()
+            exp.setTime(exp.getTime() - 1)
+            var cval = setCookie(name)
+            if (cval && cval != null) {
+                document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+            }
+        }
+
+
+
+    function getTabContent(tabid){
+        layui.use('flow', function(){
+            var flow = layui.flow;
+
+            flow.load({
+                elem: '#tabcontent' //流加载容器
+                //,scrollElem: '#LAY_demo1' //滚动条所在元素，一般不用填，此处只是演示需要。
+                ,done: function(page, next){ //执行下一页的回调
+                    $.ajax({
+                        type: "GET",
+                        url: "/blog/tab/"+tabid+"/"+page,
+                        // data: page,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code=="200"){
+                                var pagesize;
+                                var lis = [];
+                                if (JSON.stringify(data.data)=="{}"){
+                                    // $("#tabcontent").html("没有更多数据");
+                                    pagesize=0;
+                                    //return next(lis.join(''), page < pagesize);
+                                }
+                                else {
+                                    pagesize=data.data.totolpage;
+                                }
+                                if (data.data.content!=undefined) {
+                                    lis.push(data.data.content);
+                                }
+
+
+
+                                //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                                //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                                next(lis.join(''), page < pagesize); //假设总页数为 10
+                            }
+
+                        }})
+
+                }
+            });
+        });
+        }
+</script>
+</body>
+
+</html>

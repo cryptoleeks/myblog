@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.loveyx815.blog.dao.AdminDao">
+
+
+
+    <select id="getCategoryForAdmin" resultType="java.util.Map">
+        SELECT f.id pid,code1.c_name pname,s.id sid,code2.c_name sname FROM
+myblog.t_onecategory f
+LEFT JOIN myblog.t_twocategory s
+ON f.c_code_id=s.c_code_pid
+LEFT JOIN myblog.t_code code1
+ON code1.c_id=f.c_code_id
+LEFT JOIN myblog.t_code code2
+ON code2.c_id=s.c_code_id
+limit #{cursize},#{pagesize}
+    </select>
+    <select id="getCategoryCount" resultType="java.lang.Integer">
+        select count(*) from
+        myblog.t_onecategory firstkid
+LEFT JOIN myblog.t_twocategory secondkid
+ON secondkid.c_code_pid=firstkid.c_code_id
+    </select>
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(c_id)+1 from myblog.t_code
+    </select>
+    <select id="getAllBlog" resultType="java.util.Map">
+        SELECT b.id id,b.c_title title ,b.c_time time,code1.c_name fname,code2.c_name sname,u.c_name username,l.l_name bq FROM
+myblog.t_blog b
+LEFT JOIN myblog.t_user u
+ON b.c_uid=u.id
+LEFT JOIN myblog.t_onecategory firstkid
+ON firstkid.id=b.c_firstid
+LEFT JOIN myblog.t_twocategory secondkid
+ON secondkid.id=b.c_secondid
+LEFT JOIN myblog.t_lable l
+ON l.id=b.c_lable_id
+LEFT JOIN myblog.t_code code1
+ON code1.c_id=firstkid.c_code_id
+LEFT JOIN myblog.t_code code2
+ON code2.c_id=secondkid.c_code_id
+ORDER BY b.c_time DESC
+limit #{indexstart},#{pagesize}
+    </select>
+    <select id="getAllUser" resultType="java.util.Map">
+SELECT u.c_name username,u.id,
+CASE
+u.c_xb
+WHEN '1' THEN '男'
+WHEN '0' THEN '女'
+END as xb
+,u.c_time date,u.c_brith birth,u.c_alias alias
+FROM myblog.t_user u
+    </select>
+
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(id)
+        from myblog.t_user
+    </select>
+    <insert id="saveCateCode" >
+        INSERT into myblog.t_code (id,c_id ,c_name) value(#{id},#{cid},#{cname})
+
+    </insert>
+    <update id="updateSecond" >
+        update myblog.t_code code   set code.c_name=#{name}
+        where code.c_id = (select s.c_code_id from myblog.t_twocategory s
+         where s.id=#{id})
+    </update>
+</mapper>

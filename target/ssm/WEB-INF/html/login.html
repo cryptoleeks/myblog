@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <script src="../layui/layui.js"></script>
+    <script src="../static/js/jquery-1.8.3.min.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css" />
+</head>
+<body class="layui-colorpicker-main-wrapperp">
+<div class="layui-container">
+    <form class="layui-form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <button class="layui-btn" lay-submit lay-filter="formDemo" >登录<i class="ai ai-enter"></i></button>
+    </form>
+</div>
+</body>
+
+<script>
+    //Demo
+    var uri="localhost:8080/";
+
+    function submitForm(){
+        var form = new FormData($(".layui-form"));
+        $.ajax({
+            type: "POST",
+            url: "/user/login",
+            data: form,
+            dataType: "json",
+            success: function(data){
+                if(data.code=="200"){
+                    layer.msg('登录成功', {
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+
+                    });
+                    layer.href=uri+"/index";
+
+                    //layer.open(uri+"/index");
+                }
+                else {
+                    layer.msg("用户名或密码不存在");
+                }
+
+
+            }
+        });
+    }
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: "/user/login",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function(data){
+                    if(data.code=="200"){
+                        layer.msg('登录成功', {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                                window.location.href="/index";
+                        });
+
+
+                        //layer.open(uri+"/index");
+                    }
+                    else {
+                        layer.msg("用户名或密码不存在");
+                    }
+
+
+                }
+            });
+            return false;
+        });
+    });
+    layui.use('element', function() {
+        var element = layui.element;
+
+    });
+</script>
+
+</html>

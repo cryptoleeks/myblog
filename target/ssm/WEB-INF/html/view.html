@@ -1,0 +1,358 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>查看文章</title>
+    <link rel="stylesheet" type="text/css" href="../static/plug-ins/lib/codemirror/codemirror.min.css"/>
+    <script type="text/javascript" src="../static/plug-ins/lib/marked.min.js"></script>
+    <script type="text/javascript" src="../static/plug-ins/lib/prettify.min.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../static/plug-ins/editormd.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/plug-ins/css/editormd.css"/>
+    <link rel="stylesheet" href="../layui/css/layui.css"/>
+    <script src="../layui/layui.js"></script>
+    <!--<script type="text/javascript">
+        editormd.markdownToHTML("content");
+    </script>-->
+
+</head>
+
+<body>
+<div class="layui-row">
+    <div class="layui-header">
+
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <div class="header_centent">
+            <i class="layui-icon" style="float: left">&#xe653;</i>
+        </div>
+
+        <ul class="layui-nav layui-layout-right" id="userinfo">
+
+        </ul>
+    </div>
+</div>
+<div class="layui-row">
+    <div class="layui-container">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">看博客</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-row">
+                    <div class="layui-card">
+                        <div class="layui-container">
+                            <div class="layui-col-md8 layui-col-md-offset2">
+                                <!--显示面板-->
+                                <div class="layui-row">
+                                    <div class="layui-card-header" id="blogtitle">
+
+                                    </div>
+                                    <div  style="float: right">
+                                        作者：<span id="people"></span>
+                                        时间：<span id="time"></span>
+                                        浏览量：<span id="value"></span>
+                                    </div>
+                                </div>
+
+                                <div class="layui-card-body">
+                                    <!--在该div中展示,如有初始化的数据可以放在textarea中-->
+                                    <div id="testEditorMdview">
+                                        <textarea id="appendTest" style="display:none;"></textarea>
+                                    </div>
+                                </div>
+
+
+                                <!--评论面板-->
+                                <div class="layui-row layui-col-md12">
+                                    <div class=" layui-row" >
+                                        <textarea id="textcomment" class="layui-textarea" placeholder="在这写您想评论的内容"></textarea>
+                                    </div>
+                                    <div class="layui-btn layui-btn-normal layui-row" onclick="addComment()" title="提交" >
+                                        提交
+                                    </div>
+                                    <hr>
+                                    <div id="commentlist">
+                                        <div class="layui-row">
+                                            <ul class="flow-default" id="comment1"><span name="span1">zhanghao:</span>我要上班<span style="float: right" name="date1">日期：2019/4/1</span></ul>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+
+
+
+                                        <ul class="flow-default" id="comment"></ul>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row ">
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div id="getId" style="display: none"></div>
+
+</div>
+
+<script type="text/javascript">
+    var id="";
+    var key="";
+    var layer;
+    //key为cookie的名称， val为cookie的值， time为过期时间（单位为秒）
+    function setCookie(key, val, time) {
+        if (typeof key !== 'string' || typeof val !== 'string' ) {
+            return false;
+        }
+        time = time || 7 * 24 * 3600;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + time * 1000);
+        document.cookie = key + '=' + val + ';expires=' + exp.toGMTString();
+    }
+    function getBlogId() {
+        var arr1 = document.cookie.split("; ");//由于cookie是通过一个分号+空格的形式串联起来的，所以这里需要先按分号空格截断,变成[name=Jack,pwd=123456,age=22]数组类型；
+        for (var i = 0; i < arr1.length; i++) {
+            var arr2 = arr1[i].split("=");//通过=截断，把name=Jack截断成[name,Jack]数组；
+            if (arr2[0] == "token") {
+              key= arr2[1]+"-blogid";
+            }
+            if (arr2[0].indexOf("-blogid")!=-1){
+                id=arr2[1];
+                setCookie(arr2[0], "", -1);
+            }
+        }
+    }
+    function addComment(){
+        ///blog/comment/{id}
+        var content=$("#textcomment").val();
+        $.ajax({
+            type: "POST",
+            url: "/blog/addcomment/"+id,
+            data:"content="+content,
+            dataType: "json",
+            success: function (data) {
+                if (data.code=="200"){
+                    layer.msg(data.data, {
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        window.location.href = "/view/"+id;
+                    });
+                }
+            }})
+    }
+    $(function () {
+        getBlogId();
+        $.ajax({
+            type: "GET",
+            url: "/blog/view/article/"+id,
+            dataType: "json",
+            success: function (data) {
+                var blog=data.data;
+                if (data.code=="200"){
+                    $("#blogtitle").text(blog.c_title);
+                    $("#people").text(blog.name);
+                    $("#time").text(blog.c_time);
+                    $("#value").text(blog.c_value);
+                    mdToHml(blog.c_content);
+
+                }
+            }
+        })
+    })
+    //markDown转HTMl的方法
+    function mdToHml(content){
+
+        //先对容器初始化，在需要展示的容器中创建textarea隐藏标签，
+        $("#testEditorMdview").html('<textarea id="appendTest" style="display:none;"></textarea>');
+        //var content=$("#demo1").val();//获取需要转换的内容
+        $("#appendTest").val(content);//将需要转换的内容加到转换后展示容器的textarea隐藏标签中
+
+        //转换开始,第一个参数是上面的div的id
+        editormd.markdownToHTML("testEditorMdview", {
+            htmlDecode: "style,script,iframe", //可以过滤标签解码
+            emoji: true,
+            taskList:true,
+            tex: true,               // 默认不解析
+            flowChart:true,         // 默认不解析
+            sequenceDiagram:true,  // 默认不解析
+        });
+    }
+    //评论列表加载
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        flow.load({
+            elem: '#commentlist' //流加载容器
+            ,done: function(page, next){ //执行下一页的回调
+                $.ajax({
+                    type: "GET",
+                    url: "/blog/comment/"+id+"/"+page,
+                    // data: page,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code=="200"){
+                            var lis = [];
+                                if (data.data.content!=undefined) {
+                                    lis.push(data.data.content);
+                                }
+
+
+                            //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                            //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                            next(lis.join(''), page < data.data.totalpage!=undefined?0:data.data.totalpage); //假设总页数为 10
+                        }
+
+                    }})
+
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    var uri = "localhost:8080";
+    $(function () {
+        editormd("test-editormd", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            //你的lib目录的路径，我这边用JSP做测试的
+            path: "../static/plug-ins/lib/",
+            //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/uploadfile",
+            saveHTMLToTextarea: true
+        });
+
+    });
+</script>
+
+
+
+<script>
+    //JavaScript代码区域
+    var uri = "localhost:8080/";
+
+    window.onload = function () {
+
+        //异步加载首页导航栏
+        var url = "category";
+        var strhtml = "<ul class=\"layui-nav\" lay-filter=\"\" >"+"<li class=\"layui-nav-item\" id=\"index\" ><a href=\"/index\">首页</a></li>";
+
+        //alert("");
+        $.ajax({
+            type: "GET",
+            url: "/blog/category/",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function (data) {
+                var list = data.data;
+                for (var i in list) {
+                    var categoryid;
+                    strhtml += "<li class='layui-nav-item'><a onclick=\"setCookie('categoryid','"+list[i].pid+"')\"  href='/blog/viewlink'>" + list[i].pname + "</a>";
+                    if (list[i].childList != null) {
+                        strhtml += "<dl class=\"layui-nav-child\"> <!-- 二级菜单 -->";
+                        var childlist = list[i].childList;
+                        for (var j in childlist) {
+                            strhtml += "<dd><a onclick=\"setCookie('categoryid','"+childlist[j].sid+"')\" href=\"/blog/viewlink\">" + childlist[j].sname + "</a></dd>";
+                        }
+                        strhtml += "</dl>";
+                    }
+                }
+                strhtml += "</li></ul>";
+                //indexViewTab(list);
+                userinfo();
+                $(".header_centent").html(strhtml);
+                init();
+            }
+        });
+    }
+
+
+    //
+    /*function userLogin() {
+        $.ajax({
+            type: "GET",
+            url: "/user/login",
+            /!*data: {username:$("#username").val(), content:$("#content").val()},*!/
+            dataType: "json",
+            success: function(data){
+
+            }
+
+    }*/
+
+    /*导航栏右上的用户信息状态*/
+    function userinfo() {
+        var strhtml=" <li class=\"layui-nav-item\"><a href=\"/blog/write\">写博客</a></li>"
+            +"<li class=\"layui-nav-item\"><a href=\"/message \">留言</a></li>";
+        $.ajax({
+            type: "GET",
+            url: "/user/cookie",
+            /*data: {username:$("#username").val(), content:$("#content").val()},*/
+            dataType: "json",
+            success: function(data){
+                if("200"==data.code){
+                    var jsondata=data.data;
+                    strhtml+=" <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\"/user/userinfo\">\n"+ jsondata.cName +
+                        "            <img src=\""+ jsondata.cImgAdr+"\" class=\"layui-nav-img\"> </a>\n" +
+                        /*"            <dl class=\"layui-nav-child\">\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/"+jsondata.id+"\">基本资料</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/blog/"+jsondata.id+"\">我的博客</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/comment/"+jsondata.id+"\">我的评论</a>\n" +
+                        "            </dd>\n" +
+                        "            <dd>\n" +
+                        "            <a href=\"/userinfo/password/"+jsondata.id+"\">密码修改</a>\n" +
+                        "            </dd>\n" +
+                        "            </dl>\n" +*/
+                        "            </li>\n" +
+                        "            <li class=\"layui-nav-item\">\n" +
+                        "            <a href=\""+"/user/logout"+"\">退了</a>\n" +
+                        "            </li>";
+
+                }
+                else {
+                    strhtml+="<li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\""+""+"/blog/login"+"\">登录</a>\n" +
+                        "                                <li class=\"layui-nav-item\">\n" +
+                        "                                <a href=\"/user/register\">注册</a>\n" +
+                        "                                </li>"
+                }
+                $("#userinfo").html(strhtml);
+            }
+        });
+    }
+
+    function init() {
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+        layui.use('layer', function(){
+             layer = layui.layer;
+
+            //layer.msg('hello');
+        });
+    }
+</script>
+</body>
+
+</html>
