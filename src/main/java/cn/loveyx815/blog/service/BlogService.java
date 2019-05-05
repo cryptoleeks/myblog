@@ -29,4 +29,6 @@ public interface BlogService {
     List<Map<String, Object>> getBlogByCategory(String categoryid);
 
     public List<Map<String, Object>> getLable();
+
+    Map<String, Object> getAllSerach(String serachstr);
 }

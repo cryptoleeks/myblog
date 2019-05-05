@@ -26,4 +26,8 @@ public interface AdminDao {
             @Param("pagesize") Integer limitsize);
 
     void updateSecond(@Param("sid") String sid,@Param("name") String name);
+
+    void delCategoryFirstById(@Param("id") Integer id);
+
+    void delCategorySecondById(@Param("id") Integer id);
 }

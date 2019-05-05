@@ -62,4 +62,9 @@ public class UserServiceImpl implements UserService {
         userDao.deleteByPrimaryKey(id);
     }
 
+    @Override
+    public Object queryUserByname(String username) {
+        return userDao.queryUserByname(username);
+    }
+
 }

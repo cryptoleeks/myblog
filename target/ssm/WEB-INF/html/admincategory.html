@@ -218,6 +218,10 @@
     }
     function updateSecondKid(id,pname,sname) {
         var content;
+        if (id==undefined||id==null||id=='undefined'){
+            layer.msg("该二级分类为空，请先添加二级分类哦！");
+            return;
+        }
         layer.open({
             type: 1
             ,title: false //不显示标题栏
@@ -282,10 +286,18 @@
         })
 
     }
-    function delComment(id){
+    function delCategory(sid,pid){
+        var id=sid;
+        var url="/admin/category/";
+        if (id==null||id==undefined||id=='undefined'){
+            id=pid;
+            url+="first/"+id;
+        }
+        url+="second/"+id;
+
         $.ajax({
             type: "DELETE",
-            url: "/comment/del/"+id,
+            url: url,
             /*data: {username:$("#username").val(), content:$("#content").val()},*/
             dataType: "json",
             success: function(data){
@@ -335,14 +347,18 @@
                         if("200"==data.code&&data.data!=undefined){
                             tabledata=data.data;
                         }
+
                         for (var i in tabledata ) {
-                            //var path="/admin/user/del/"+tabledata[i].id;
+                            var sname=tabledata[i].sname;
+                            if (sname==undefined||sname==null){
+                                sname="无";
+                            }
                             str+="<tr>\n" +
                                 "                        <td>"+tabledata[i].pname+"</td>\n" +
-                                "                        <td>"+tabledata[i].sname+"</td>\n" +
+                                "                        <td>"+sname+"</td>\n" +
                                 "                        <td>\n" +
                                 "    <a class=\"layui-btn layui-btn-xs\" onclick=\"updateSecondKid('"+tabledata[i].sid+"','"+tabledata[i].pname+"','"+tabledata[i].sname+"')\" lay-event=\"edit\">编辑</a>\n"+
-                                "                            <a href='javascript:void(0);' class=\"layui-btn layui-btn-danger layui-btn-xs\" onclick=\"delComment('"+tabledata[i].id+"')\" >删除</a>\n" +
+                                "                            <a href='javascript:void(0);' class=\"layui-btn layui-btn-danger layui-btn-xs\" onclick=\"delCategory('"+tabledata[i].scode+"','"+tabledata[i].pcode+"')\" >删除</a>\n" +
                                 "                        </td>\n" +
                                 "                    </tr>";
                         }

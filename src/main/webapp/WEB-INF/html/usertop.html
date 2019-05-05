@@ -36,7 +36,30 @@
             </ul>-->
 
         </div>
+        <ul class="layui-nav " id="serach"  >
+            <li class="layui-nav">
+                <div class="layui-nav layui-input-inline" style="margin-top: 15px; ">
+                    <input class="layui-input" placeholder="搜索" id="serachinput" style="    height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                </div>
+                <button class="layui-btn layui-btn-sm layui-btn-primary  layui-inline" onclick="getSerachEvent()" style="    margin-left: -15px;margin-top: 15px;height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                    <i class="layui-icon-search layui-icon" ></i></button>
 
+            </li>
+        </ul>
         <ul class="layui-nav layui-layout-right" id="userinfo" >
 
         </ul>
@@ -165,10 +188,13 @@
     </div>-->
 
 
-    <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
-    </div>
+        <div class="layui-footer" style="left: 0px">
+            <!-- 底部固定区域 -->
+            <div class="layui-col-md-offset5">
+                © loveyx815.cn - Blog Web
+            </div>
+
+        </div>
 </div>
 </div>
 <script>
@@ -381,9 +407,9 @@
             // })
             //formTest 即 class="layui-form" 所在元素对应的 lay-filter="" 对应的值
 
-            //监听提交
-            form.on('submit(formDemo)', function (data) {
-                data.field.file = path;
+            //修改密码
+            form.on('submit(pswbtu)', function (data) {
+                //data.field.file = path;
                 layer.msg(JSON.stringify(data.field));
                 $.ajax({
                     type: "PUT",
@@ -412,15 +438,16 @@
                 return false;
             });
 
-            //修改密码
-            form.on('submit(pswbtu)', function (data) {
-                data.field.file = path;
+            //修改信息
+            form.on('submit(formDemo)', function (data) {
+                //data.field.file = path;
                 layer.msg(JSON.stringify(data.field));
                 $.ajax({
-                    type: "POST",
-                    url: "/user/updata/"+id+"",
+                    type: "PUT",
+                    url: "/user/updata/"+id,
                     data: data.field,
                     dataType: "json",
+                    sync:false,
                     success: function (data) {
                         if (data.code == "200") {
                             layer.msg('修改成功', {
@@ -524,6 +551,56 @@
                     }
                 }})
         }
+
+    }
+    function getSerachEvent() {
+        var serachcontent;
+
+        $.ajax({
+            type: "GET",
+            url: "/blog/serach",
+            data: {serach:$("#serachinput").val()},
+            dataType: "json",
+            sync:false,
+            success: function(data){
+                if("200"==data.code){
+                    serachcontent=data.data.content;
+                }
+                else if ("300"==data.code){
+                    serachcontent=data.data;
+                }
+                showSerachResult(serachcontent);
+            }
+        });
+
+
+    }
+
+    function showSerachResult(serachcontent) {
+        layui.use('layer', function() {
+            var layer = layui.layer;
+            layer.open({
+                type: 1
+                ,title: false //不显示标题栏
+                ,closeBtn: false
+                ,area: ['600px', '380px']
+                ,shade: 0.8
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btn: '返回'
+                ,yes:function(){
+                    layer.closeAll();
+                }
+                ,btnAlign: 'c'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,content:"<div class=\"layui-card\">\n" +
+                    "                    <div class=\"layui-card-header\" style=\"border-left: solid #01aaed70;\">搜索结果</div>\n" +
+                    "                    <div class=\"layui-card-body\">\n" +serachcontent +
+                    "                    </div>\n" +
+                    "                </div>"
+
+            });
+        });
+
 
     }
 

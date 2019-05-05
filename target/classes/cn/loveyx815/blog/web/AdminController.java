@@ -63,18 +63,26 @@ public class AdminController {
     public String toUser(){
         return "/admin/userlist";
     }
-
+    /**
+    * @Description: 管理员分页查询用户数据
+    * @Param: [curpage, size]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Yonggang Shi
+    * @Date: 2019/5/2 0002
+    */
     @RequestMapping(value = "/user/{curpage}/{size}",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getUserList(@PathVariable String curpage,@PathVariable String size){
-        Integer indexstart=0;
-        Integer limitsize=10;
+        Integer indexstart=1;//分页开始索引下标初始化
+        Integer limitsize=10;//分页大小
         if (!StringUtils.isEmpty(curpage)){
+            //获得当前页面的索引下标
             indexstart=Integer.parseInt(curpage);
         }
         if (!StringUtils.isEmpty(size)){
             limitsize=Integer.parseInt(size);
         }
+        //分页查找
         List<Map<String ,Object>> list=adminService.getAllUserLimit((indexstart-1)*limitsize,limitsize);
         return Utils.JSONDataReturn(list,"200");
     }
@@ -105,6 +113,21 @@ public class AdminController {
             limitsize=Integer.parseInt(size);
         }
         List<Map<String ,Object>> list=commentService.getCommentForAdmin((indexstart-1)*limitsize,limitsize);
+        return Utils.JSONDataReturn(list,"200");
+    }
+
+    @RequestMapping(value = "/message/{curpage}/{size}",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getMessageList(@PathVariable String curpage,@PathVariable String size){
+        Integer indexstart=0;
+        Integer limitsize=10;
+        if (!StringUtils.isEmpty(curpage)){
+            indexstart=Integer.parseInt(curpage);
+        }
+        if (!StringUtils.isEmpty(size)){
+            limitsize=Integer.parseInt(size);
+        }
+        List<Map<String ,Object>> list=adminService.getMessageForAdmin((indexstart-1)*limitsize,limitsize);
         return Utils.JSONDataReturn(list,"200");
     }
 
@@ -185,27 +208,39 @@ public class AdminController {
         return Utils.JSONDataReturn(count,"200");
     }
 
-    @RequestMapping(value = "/user/del/{id}")
+    @RequestMapping(value = "/user/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delUserById(@PathVariable String id){
         userService.delUserById(id);
         return Utils.JSONDataReturn("删除成功","200");
     }
 
-    @RequestMapping(value = "/lable/del/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/lable/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delLableById(@PathVariable String id){
         adminService.delLableById(id);
         return Utils.JSONDataReturn("删除成功","200");
     }
-    @RequestMapping(value = "/comment/del/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delCommentById(@PathVariable String id){
         commentService.delCommentById(id);
         return Utils.JSONDataReturn("删除成功","200");
     }
+    @RequestMapping(value = "/category/first/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public Map<String, Object> delCategoryFirstById(@PathVariable String id){
+        adminService.delCategoryFirstById(Integer.parseInt(id));
+        return Utils.JSONDataReturn("删除成功","200");
+    }
+    @RequestMapping(value = "/category/second/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public Map<String, Object> delCategorySecondById(@PathVariable String id){
+        adminService.delCategorySecondById(Integer.parseInt(id));
+        return Utils.JSONDataReturn("删除成功","200");
+    }
 
-    @RequestMapping(value = "/message/del/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/message/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delMessageById(@PathVariable String id){
         adminService.delMessageById(id);

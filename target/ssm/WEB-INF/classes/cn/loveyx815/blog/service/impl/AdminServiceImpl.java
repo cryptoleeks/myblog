@@ -123,5 +123,20 @@ public class AdminServiceImpl implements AdminService {
         messageDao.deleteByPrimaryKey(id);
     }
 
+    @Override
+    public List<Map<String, Object>> getMessageForAdmin(int i, Integer limitsize) {
+        return messageDao.getAllMessageByPage(i,limitsize);
+    }
+
+    @Override
+    public void delCategoryFirstById(Integer id) {
+        adminDao.delCategoryFirstById(id);
+    }
+
+    @Override
+    public void delCategorySecondById(Integer id) {
+        adminDao.delCategorySecondById(id);
+    }
+
 
 }

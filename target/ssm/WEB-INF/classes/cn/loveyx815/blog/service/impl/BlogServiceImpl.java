@@ -105,7 +105,7 @@ public class BlogServiceImpl implements BlogService {
                 content+="<div class=\"layui-row layui-anim-fadein\n\" id=\"contentlist"+comment.get("id") +"\" name=\"contentlist\" >\n" +
                         "                                <div class=\"layui-col-md3\">\n" +
                         "                                    <div style=\"width: 120px;height: 120px\">\n" +
-                        "                                        <i class=\"layui-icon\" style=\"width: 120px;height: 120px\">&#xe64a</i>\n" +
+                        "<img style=\"width: 180px;height: 113px\" src=\""+comment.get("c_pic_adr")+"\" >"+
                         "                                    </div>\n" +
                         "                                </div>\n" +
                         "                                <div class=\"layui-col-md9\">\n" +
@@ -181,6 +181,77 @@ public class BlogServiceImpl implements BlogService {
         List<Map<String, Object>> lable = lableDao.getAllLable();
 
         return lable;
+    }
+
+    @Override
+    public Map<String, Object> getAllSerach(String serachstr) {
+        int count=dao.getCountBySerach(serachstr);
+        //int totalPage= (int) Math.ceil(count*1.0/curSize);
+        List<Map<String, Object>> list=null;
+        Map<String,Object> map=null;
+        if (count ==0){
+            return  new HashMap<>();
+        }
+        list= dao.getAllSerach(serachstr);
+        if (!list.isEmpty()){
+            String content="";
+            int i=0;
+            map=new HashMap<>();
+            String category="";
+            for (Map<String,Object> comment:list) {
+
+
+                content+="<div class=\"layui-row layui-anim-fadein\n\" id=\"sercahlist"+comment.get("id") +"\" name=\"contentlist\" >\n" +
+                        "                                <div class=\"layui-col-md3\">\n" +
+                        "                                    <div style=\"width: 120px;height: 120px\">\n" +
+                        "<img style=\"width: 120px;height: 110px\" src=\""+comment.get("c_pic_adr")+"\" >"+
+                        "                                    </div>\n" +
+                        "                                </div>\n" +
+                        "                                <div class=\"layui-col-md9\">\n" +
+                        "                                    <div class=\"layui-card\">\n" +
+                        "                                        <div class=\"layui-card-header\">"+
+                        "<a href=\"/view/"+comment.get("id")+"\"><h3>标题："+comment.get("c_title")+"</h3></a>"
+                        +"</div>\n" +
+                        "                                        <div class=\"layui-card-body\">\n" +
+                        "                                            <div class=\"layui-elip\" id=\"serachabstract"+comment.get("id") +"\">\n" +
+                        "                                            </div>\n" +
+                        "                                            <div class=\"layui-hide\t\" id=\"serachhide"+comment.get("id") +"\">内容："+comment.get("c_content") +"</div>\n" +
+                        "                                            <script>\n" +
+                        "                                                $(\"#serachabstract"+comment.get("id") +"\").text($('#serachhide"+comment.get("id") +"')[0].textContent);\n" +
+                        "                                            </script>\n"+"<div class=\"layui-row\">\n"+
+                        "<div class=\"layui-col-md6\">\n"+
+                        " <i class=\"layui-icon layui-icon-use\">&#xe770;"+comment.get("c_name") +"</i>\n"+
+                        " <i class=\"layui-icon layui-icon-date\">&#xe637;"+comment.get("c_time")+"</i>\n"+"</div>"+
+                        " <div class=\"layui-col-md3 layui-col-md-offset3\">"+
+                        " <i class=\"layui-icon\">&#xe60e;"+comment.get("c_value") +"</i>\n"+
+                        " <i class=\"layui-icon\">&#xe63a;"+comment.get("comment") +"</i>\n"+
+
+                        "</div>\n"+ " </div>\n"+
+                        "                                        </div>\n"+
+                        "                                    </div>\n"+
+                        "                                </div>\n"+
+                        "                            </div>";
+
+
+
+
+
+
+
+
+
+
+
+
+
+                i++;
+
+            }
+
+            map.put("content",content);
+        }
+        map.put("count",count);
+        return map;
     }
 
 

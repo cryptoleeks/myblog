@@ -11,18 +11,50 @@
     <link rel="stylesheet" href="../layui/css/layui.css"/>
     <script src="../layui/layui.js"></script>
 
-
+<script >
+    //获取封面图片
+   /* $(".editormd-enter-btn").click(function(){*/
+var btn=document.getElementsByClassName("editormd-enter-btn");
+btn.click(function(){
+        alert("点击了");
+    });
+</script>
 </head>
 
-<body>
+<body style="background-color: #eeeeee;">
 <div class="layui-row">
     <div class="layui-header">
 
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <div class="header_centent">
-            <i class="layui-icon" style="float: left">&#xe653;</i>
+            <!--<i class="layui-icon" style="float: left">&#xe653;</i>-->
         </div>
+        <ul class="layui-nav " id="serach"  style="    position: absolute;
+    left: 427px;
+    top: 0px;" >
+            <li class="layui-nav">
+                <div class="layui-nav layui-input-inline" style="margin-top: 15px; ">
+                    <input class="layui-input" placeholder="搜索" id="serachinput" style="    height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                </div>
+                <button class="layui-btn layui-btn-sm layui-btn-primary  layui-inline" onclick="getSerachEvent()" style="    margin-left: -15px;margin-top: 15px;height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                    <i class="layui-icon-search layui-icon" ></i></button>
 
+            </li>
+        </ul>
         <ul class="layui-nav layui-layout-right" id="userinfo">
 
         </ul>
@@ -110,11 +142,19 @@
                 </form>
             </div>
 
+
         </div>
     </div>
     <div class="layui-row">
 
     </div>
+</div>
+<div class="layui-footer" style="left: 0px">
+    <!-- 底部固定区域 -->
+    <div class="layui-col-md-offset5">
+        © loveyx815.cn - Blog Web
+    </div>
+
 </div>
 </div>
 
@@ -125,7 +165,7 @@
     $(function () {
         editormd("test-editormd", {
             width: "90%",
-            height: 640,
+            height: "65%",
             syncScrolling: "single",
             //你的lib目录的路径，我这边用JSP做测试的
             path: "../static/plug-ins/lib/",
@@ -135,6 +175,7 @@
             imageUploadURL: "/uploadfile",
             saveHTMLToTextarea: true
         });
+
        getSelect();
         getLableSelect();
         function getSelect() {
@@ -422,6 +463,7 @@
 <script>
     window.onlaod = function () {
 
+
         $(".CodeMirror").css({
             'heigth': 'auto'
         });
@@ -529,6 +571,56 @@
                 $("#userinfo").html(strhtml);
             }
         });
+    }
+    function getSerachEvent() {
+        var serachcontent;
+
+        $.ajax({
+            type: "GET",
+            url: "/blog/serach",
+            data: {serach:$("#serachinput").val()},
+            dataType: "json",
+            sync:false,
+            success: function(data){
+                if("200"==data.code){
+                    serachcontent=data.data.content;
+                }
+                else if ("300"==data.code){
+                    serachcontent=data.data;
+                }
+                showSerachResult(serachcontent);
+            }
+        });
+
+
+    }
+
+    function showSerachResult(serachcontent) {
+        layui.use('layer', function() {
+            var layer = layui.layer;
+            layer.open({
+                type: 1
+                ,title: false //不显示标题栏
+                ,closeBtn: false
+                ,area: ['600px', '380px']
+                ,shade: 0.8
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btn: '返回'
+                ,yes:function(){
+                    layer.closeAll();
+                }
+                ,btnAlign: 'c'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,content:"<div class=\"layui-card\">\n" +
+                    "                    <div class=\"layui-card-header\" style=\"border-left: solid #01aaed70;\">搜索结果</div>\n" +
+                    "                    <div class=\"layui-card-body\">\n" +serachcontent +
+                    "                    </div>\n" +
+                    "                </div>"
+
+            });
+        });
+
+
     }
 
     function init() {

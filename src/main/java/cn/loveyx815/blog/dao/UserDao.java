@@ -63,4 +63,6 @@ public interface UserDao {
     List<Map<String, Object>> getAllUserLimit(
             @Param("indexstart") Integer indexstart,
             @Param("limitsize") Integer limitsize);
+
+    Object queryUserByname(@Param("username") String username);
 }

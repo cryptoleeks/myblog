@@ -16,6 +16,7 @@
     <result column="c_secondid" jdbcType="VARCHAR" property="cSecondId" />
     <result column="c_lable_id" jdbcType="VARCHAR" property="cLableId" />
     <result column="c_pic_adr" jdbcType="VARCHAR" property="cPicAdr" />
+    <result column="c_md" jdbcType="VARCHAR" property="cMd" />
     <result column="c_value" jdbcType="INTEGER" property="cValue" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -26,6 +27,35 @@
     -->
     id, c_title, c_content, c_uid, c_time,c_firstid,c_secondid, c_lable_id, c_pic_adr, c_value
   </sql>
+  <select id="getAllSerach" resultType="java.util.Map">
+    select
+    u.c_name,u.c_img_adr,b.id, b.c_title, b.c_content, b.c_uid, b.c_time,b.c_firstid,b.c_secondid, b.c_lable_id, b.c_pic_adr, b.c_value,count(c.c_ref_blog) comment,
+    code1.c_name fname,code2.c_name sname
+    from myblog.t_blog b
+    LEFT JOIN myblog.t_comment c on c.c_ref_blog=b.id
+    LEFT JOIN myblog.t_user u ON u.id=b.c_uid
+    LEFT JOIN myblog.t_code code1 on code1.c_id=b.c_firstid
+    LEFT JOIN myblog.t_code code2 ON code2.c_id=b.c_secondid
+    <where>
+
+      <if test="serach!=null and serach!=''">
+         b.c_title like CONCAT("%",#{serach},"%")
+        or b.c_content like CONCAT("%",#{serach},"%")
+      </if>
+    </where>
+    GROUP BY c.c_ref_blog
+    order by b.c_time
+
+  </select>
+  <select id="getCountBySerach" resultType="java.lang.Integer">
+    select count(b.id) from myblog.t_blog b
+    <where>
+      <if test="serach!=null  and serach!=''">
+        b.c_title like CONCAT("%",#{serach},"%")
+        or b.c_content like CONCAT("%",#{serach},"%")
+      </if>
+    </where>
+  </select>
   <select id="getBlogCount" resultType="java.lang.Integer">
     select count(b.id) from myblog.t_blog b;
   </select>
@@ -55,7 +85,7 @@
       b.c_firstid=#{tabid}
       or b.c_secondid=#{tabid}
     </where>
-    GROUP BY c.c_ref_blog
+    GROUP BY b.id
     order by b.c_time
     limit #{cur},#{curSize}
   </select>
@@ -69,7 +99,7 @@
     b.c_firstid=#{categoryid}
     or b.c_secondid=#{categoryid}
   </where>
-  GROUP BY c.c_ref_blog
+  GROUP BY b.id
   order by b.c_time
   limit #{cur},#{curSize}
 </select>
@@ -104,6 +134,7 @@
     <where>
       <if test="tabid!=null">
         b.c_firstid = #{tabid,jdbcType=VARCHAR}
+        or b.c_secondid = #{tabid,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
@@ -164,6 +195,9 @@
       <if test="cPicAdr != null">
         c_pic_adr,
       </if>
+      <if test="cMd != null">
+        c_md,
+      </if>
       <if test="cValue != null">
         c_value,
       </if>
@@ -195,6 +229,9 @@
       </if>
       <if test="cPicAdr != null">
         #{cPicAdr,jdbcType=VARCHAR},
+      </if>
+      <if test="cMd != null">
+        #{cMd,jdbcType=VARCHAR},
       </if>
       <if test="cValue != null">
         #{cValue,jdbcType=INTEGER},

@@ -5,15 +5,19 @@ import cn.loveyx815.blog.entity.Message;
 import cn.loveyx815.blog.entity.User;
 import cn.loveyx815.blog.service.UserService;
 import cn.loveyx815.blog.util.CookieUtil;
+import cn.loveyx815.blog.util.JsonDateValueProcessor;
 import cn.loveyx815.blog.util.RedisUtil;
 import cn.loveyx815.blog.util.Utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import net.sf.json.JsonConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +40,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    /*
-    *
-    * */
-    public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response,Model model) {
+   /**
+   * @Description: 用户登录
+   * @Param: [request, response]
+   * @return: java.util.Map<java.lang.String,java.lang.Object>
+   * @Author: Yonggang Shi
+   * @Date: 2019/5/2 0002
+   */
+    public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response ) {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         Set<String> strings = parameterMap.keySet();
@@ -58,26 +67,38 @@ public class UserController {
         }*/
 
         String password =jsonObject.get("password").toString();
+        //根据前台的名称和密码去后台查找该人
         User user = userService.queryUser(username, password);
         if (user!=null){
+            //对Date转化进行处理
+            JsonConfig jsonConfig = new JsonConfig();
+            jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+            net.sf.json.JSONObject jsonuser = net.sf.json.JSONObject.fromObject(user,jsonConfig);
+
             //登录凭证
             String token = UUID.randomUUID().toString();
             Jedis jedis = RedisUtil.getInstance().getJedis();
             if(jedis!=null){
-                jedis.set(token, JSON.toJSONString(user));
+                jedis.set(token, jsonuser+"");
                 jedis.expire(token,1800);
             }
             CookieUtil.setCookie(response,"token",token);
             return Utils.JSONDataReturn(new ArrayList<Object>() , "200");
         }
-        return Utils.JSONDataReturn(new ArrayList<Object>() , "301");
+        return Utils.JSONDataReturn("登录失败" , "301");
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String toRegister(){
         return "register";
     }
-
+    /** 
+    * @Description: 用户注册 
+    * @Param: [request] 
+    * @return: java.util.Map<java.lang.String,java.lang.Object> 
+    * @Author: Yonggang Shi
+    * @Date: 2019/5/2 0002 
+    */ 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> addUser( HttpServletRequest request){
@@ -87,6 +108,11 @@ public class UserController {
         String date=request.getParameter("date");
         String sex=request.getParameter("sex");
         String username=request.getParameter("username");
+        Object queryuser=userService.queryUserByname(username);
+        //校验用户名是否存在，存在不允许注册
+        if (queryuser!=null){
+            return Utils.JSONDataReturn("用户名已被注册","300");
+        }
         String password=request.getParameter("password");
         String alias=request.getParameter("alias");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -95,7 +121,7 @@ public class UserController {
 
             date1 = sdf.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("日期解析异常");
         }
         //  String jsonstr=request.getParameter("json");
        // JSONObject jsonObject = JSONObject.parseObject(jsonstr);
@@ -243,6 +269,8 @@ public class UserController {
         String newpsw=request.getParameter("newpassword");
         User user=userService.getUserById(uid);
         if (StringUtils.equals(oldpsw,user.getcPassword())){
+            user=new User();//定义新的用户更新密码
+            user.setId(uid);
             user.setcPassword(newpsw);
             userService.updatePassword(user);
             return Utils.JSONDataReturn("密码已更新","200");

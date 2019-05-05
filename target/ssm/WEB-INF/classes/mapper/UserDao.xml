@@ -32,6 +32,12 @@
     id, c_role, c_name, c_password, c_img_adr, c_alias, c_jj, c_dz, c_star, c_time, key1, 
     c_attention, c_fans,c_xb,c_brith
   </sql>
+  <select id="queryUserByname" resultType="java.lang.Object">
+    select u.c_name from  myblog.t_user u
+    <where>
+      u.c_name=#{username}
+    </where>
+  </select>
 <select id="getAllUserLimit" resultType="java.util.Map">
   SELECT u.id, u.c_name username,
 CASE

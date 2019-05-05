@@ -172,7 +172,7 @@
     function delLable(lid){
         $.ajax({
             type: "GET",
-            url: "/admin/lable/del/"+lid,
+            url: "/admin/lable/"+lid,
             /*data: {username:$("#username").val(), content:$("#content").val()},*/
             dataType: "json",
             success: function(data){

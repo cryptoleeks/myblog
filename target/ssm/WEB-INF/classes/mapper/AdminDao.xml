@@ -7,7 +7,7 @@
 
 
     <select id="getCategoryForAdmin" resultType="java.util.Map">
-        SELECT f.id pid,code1.c_name pname,s.id sid,code2.c_name sname FROM
+        SELECT f.id pid,code1.c_name pname,code1.c_id pcode, s.id sid,code2.c_name sname,code2.c_id scode FROM
 myblog.t_onecategory f
 LEFT JOIN myblog.t_twocategory s
 ON f.c_code_id=s.c_code_pid
@@ -32,9 +32,9 @@ myblog.t_blog b
 LEFT JOIN myblog.t_user u
 ON b.c_uid=u.id
 LEFT JOIN myblog.t_onecategory firstkid
-ON firstkid.id=b.c_firstid
+ON firstkid.c_code_id=b.c_firstid
 LEFT JOIN myblog.t_twocategory secondkid
-ON secondkid.id=b.c_secondid
+ON secondkid.c_code_id=b.c_secondid
 LEFT JOIN myblog.t_lable l
 ON l.id=b.c_lable_id
 LEFT JOIN myblog.t_code code1
@@ -66,6 +66,16 @@ FROM myblog.t_user u
     <update id="updateSecond" >
         update myblog.t_code code   set code.c_name=#{name}
         where code.c_id = (select s.c_code_id from myblog.t_twocategory s
-         where s.id=#{id})
+         where s.id=#{sid})
     </update>
+    <delete id="delCategoryFirstById" >
+        delete from myblog.t_onecategory f ,myblog.t_code c
+WHERE f.c_code_id=#{id}
+and c.c_id=#{id}
+    </delete>
+    <delete id="delCategorySecondById">
+        delete s,c from myblog.t_twocategory s ,myblog.t_code c
+WHERE s.c_code_id=#{id}
+and c.c_id=#{id}
+    </delete>
 </mapper>

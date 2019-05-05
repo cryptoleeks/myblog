@@ -45,7 +45,8 @@
     <div class="layui-row" style="margin-top: 20%">
         <div class="layui-card">
             <div class="layui-card-header"><h3>留言列表</h3>
-                <div class="layui-btn layui-layout-right" onclick="addLable()" >添加</div> </div>
+                <!--<div class="layui-btn layui-layout-right" onclick="addLable()" >添加</div>-->
+            </div>
             <div class="layui-card-body">
                 <table class="layui-table" id="blogtable">
                     <colgroup>
@@ -128,8 +129,8 @@
     }
     function delMessage(id){
         $.ajax({
-            type: "GET",
-            url: "/admin/message/del/"+id,
+            type: "DELETE",
+            url: "/admin/message/"+id,
             /*data: {username:$("#username").val(), content:$("#content").val()},*/
             dataType: "json",
             success: function(data){
@@ -179,7 +180,7 @@
                             tabledata=data.data;
                         }
                         for (var i in tabledata ) {
-                            var user=tabledata[i].user;
+                            var user=tabledata[i].name;
                             if (user==undefined){
                                 user="游客";
                             }

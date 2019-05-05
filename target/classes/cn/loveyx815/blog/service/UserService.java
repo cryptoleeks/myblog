@@ -27,4 +27,6 @@ public interface UserService {
     void addMessage(Message message1);
 
     void delUserById(String id);
+
+    Object queryUserByname(String username);
 }

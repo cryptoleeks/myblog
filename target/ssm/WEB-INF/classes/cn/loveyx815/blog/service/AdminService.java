@@ -46,4 +46,10 @@ public interface AdminService {
     Integer getMessageCount();
 
     void delMessageById(String id);
+
+    List<Map<String, Object>> getMessageForAdmin(int i, Integer limitsize);
+
+    void delCategoryFirstById(Integer id);
+
+    void delCategorySecondById(Integer id);
 }

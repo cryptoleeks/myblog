@@ -95,20 +95,22 @@ public class BlogController {
     public String writeBlog() {
         return "edit";
     }
-
+    /**
+    * @Description: 保存博客
+    * @Param: [str, request]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Yonggang Shi
+    * @Date: 2019/5/2 0002
+    */
     @RequestMapping(value = "/blog/save", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> saveBlog(@RequestBody String str, HttpServletRequest request, HttpServletResponse response, Model model) {
-       /* Map<String, String[]> parameterMap = request.getParameterMap();
-        Set<String> strings = parameterMap.keySet();*/
-        String bq = "";
+    public Map<String, Object> saveBlog(@RequestBody String str, HttpServletRequest request) {
+        String bq = "";//标签初始化
         Blog blog = new Blog();
         List<Lable> lableList = new ArrayList<>();
         Lable lable = null;
-        //JSONObject jsonObject=null;
         JSONObject json = null;
         json = JSONObject.parseObject(str);
-//        JSONObject json = (JSONObject) JSON.toJSON(strings);
         Set<String> keys = json.keySet();
         for (String key : keys) {
             String value = json.getString(key);
@@ -146,18 +148,13 @@ public class BlogController {
         String categoryselect = json.getString("categoryselect");
         String categoryselect2 = json.getString("categoryselect2");
         String uid = null;
-
-
+        //获取用户凭证
         Cookie token = CookieUtil.getCookie(request, "token");
         String cookiekey = null;
-
-
-       /* if (token!=null){
-            key=token.getValue();
-        }*/
         Jedis jedis = RedisUtil.getInstance().getJedis();
         if (jedis != null && token != null) {
             cookiekey = token.getValue();
+            //去用户权限认证中心的缓存中拿出用户信息
             String jsonstr = jedis.get(cookiekey);
             JSONObject jsonObject = JSONObject.parseObject(jsonstr);
             uid = jsonObject.get("id").toString();//获取当前用户id
@@ -238,11 +235,37 @@ public class BlogController {
         Map<String, Object> map = blogService.getCategoryContentByPage(curPage, curSize, tabid);
         return Utils.JSONDataReturn(map,"200");
     }
-
+    /** 
+    * @Description: 搜索博客 
+    * @Param: [request] 
+    * @return: java.util.Map<java.lang.String,java.lang.Object> 
+    * @Author: Yonggang Shi
+    * @Date: 2019/5/2 0002 
+    */ 
+    @RequestMapping(value = "/blog/serach",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getAllSerach(HttpServletRequest request){
+       String serachstr = request.getParameter("serach");
+       //获取后台的查询数据，返回HTML代码
+        Map<String, Object> map = blogService.getAllSerach(serachstr);
+        if (map.isEmpty()){
+            return Utils.JSONDataReturn("没有查到数据哦","300");
+        }
+        return Utils.JSONDataReturn(map,"200");
+    }
+    /**
+    * @Description: 根据文章ID查看文章
+    * @Param: [id]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Yonggang Shi
+    * @Date: 2019/5/2 0002
+    */
     @RequestMapping(value = "/blog/view/article/{id}",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getArticleById(@PathVariable String id){
+        //获取文章内容
         Map<String, Object> blog=blogService.getArticleById(id);
+        //增加文章浏览次数
         blogService.addCountVisit(id);
         return Utils.JSONDataReturn(blog,"200");
     }

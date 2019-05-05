@@ -37,6 +37,31 @@
 
         </div>
 
+            <ul class="layui-nav " id="serach"  >
+                <li class="layui-nav">
+                    <div class="layui-nav layui-input-inline" style="margin-top: 15px; ">
+                        <input class="layui-input" placeholder="搜索" id="serachinput" style="    height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary  layui-inline" onclick="getSerachEvent()" style="    margin-left: -15px;margin-top: 15px;height: 30px;
+    padding-left: 12px;
+    background-color: #424652;
+    /* background-color: rgba(255,255,255,.05); */
+    border: none 0;
+    color: #fff;
+    color: rgba(255,255,255,.5);
+    font-size: 12px;">
+                        <i class="layui-icon-search layui-icon" ></i></button>
+
+                </li>
+            </ul>
+
         <ul class="layui-nav layui-layout-right" id="userinfo" >
 
         </ul>
@@ -61,85 +86,19 @@
 
 
                         </div>
-                        <!--<div class="layui-tab-item">-->
 
-                            <!--<div class="layui-row"  onclick="detail(id)">-->
-                                <!--<div class="layui-col-md3">-->
-                                    <!--<div style="width: 120px;height: 120px">-->
-                                        <!--<i class="layui-icon" style="width: 120px;height: 120px">&#xe64a</i>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="layui-col-md9">-->
-                                    <!--<div class="layui-card">-->
-                                        <!--<div class="layui-card-header">卡片面板</div>-->
-                                        <!--<div class="layui-card-body">-->
-                                            <!--<div class="layui-row">-->
-                                                <!--简介-->
-                                            <!--</div>-->
-                                            <!--<div class="layui-row">-->
-                                                <!--<div class="layui-col-md5">-->
-
-                                                    <!--<i class="layui-icon layui-icon-use">&#xe770;测试账号</i>-->
-                                                    <!--<i class="layui-icon layui-icon-date">&#xe637;2018/12/1</i>-->
-                                                <!--</div>-->
-
-                                                <!--<div class="layui-col-md3 layui-col-md-offset4">-->
-                                                    <!--<i class="layui-icon">&#xe60e;36</i>-->
-                                                    <!--<i class="layui-icon">&#xe63a;6</i>-->
-                                                    <!--<i class="layui-icon">&#xe6c6;99</i>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-
-
-                                <!--</div>-->
-                                <!--<hr>-->
-
-
-                            <!--</div>-->
-
-                            <!--<div class="layui-row" id="contentlist1" name="contentlist" >-->
-                                <!--<div class="layui-col-md3">-->
-                                    <!--<div style="width: 120px;height: 120px">-->
-                                        <!--<i class="layui-icon" style="width: 120px;height: 120px">&#xe64a</i>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="layui-col-md9">-->
-                                    <!--<div class="layui-card">-->
-                                        <!--<div class="layui-card-header">卡片面板</div>-->
-                                        <!--<div class="layui-card-body">-->
-                                            <!--<div class="layui-elip" id="abstract1">-->
-                                            <!--</div>-->
-                                            <!--<div class="layui-hide	" id="hide1">66666heid</div>-->
-                                            <!--<script>-->
-                                                <!--$("#abstract1").text($('#hide1')[0].textContent);-->
-                                            <!--</script>-->
-                                            <!--<div class="layui-row">-->
-                                                <!--<div class="layui-col-md5">-->
-                                                    <!--<i class="layui-icon layui-icon-use">&#xe770;测试账号</i>-->
-                                                    <!--<i class="layui-icon layui-icon-date">&#xe637;2018/12/1</i>-->
-                                                <!--</div>-->
-
-                                                <!--<div class="layui-col-md3 layui-col-md-offset4">-->
-                                                    <!--<i class="layui-icon">&#xe60e;36</i>-->
-                                                    <!--<i class="layui-icon">&#xe63a;6</i>-->
-                                                    <!--<i class="layui-icon">&#xe6c6;99</i>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                        <!--</div>-->
 
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md3" style="background-color: white">
+            <div class="layui-col-md3" style="    margin-top: 9px;" >
+                <div class="layui-card">
+                    <div class="layui-card-header" style="border-left: solid #01aaed70;">网站介绍</div>
+                    <div class="layui-card-body">
+                        本网站是一个向大众开放的博客网站，现已集成了md语法编辑，欢迎大家使用！如果有什么建议也可以戳右上角的留言哈！<br>
 
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -157,9 +116,12 @@
 
     </div>-->
 
-    <div class="layui-footer">
+    <div class="layui-footer" style="left: 0px">
         <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
+        <div class="layui-col-md-offset5">
+            © loveyx815.cn - Blog Web
+        </div>
+
     </div>
 </div>
 
@@ -353,6 +315,56 @@
             }
         });
     });}
+    function getSerachEvent() {
+        var serachcontent;
+
+        $.ajax({
+            type: "GET",
+            url: "/blog/serach",
+            data: {serach:$("#serachinput").val()},
+            dataType: "json",
+            sync:false,
+            success: function(data){
+                if("200"==data.code){
+                    serachcontent=data.data.content;
+                }
+                else if ("300"==data.code){
+                    serachcontent=data.data;
+                }
+                showSerachResult(serachcontent);
+            }
+        });
+
+
+    }
+
+    function showSerachResult(serachcontent) {
+        layui.use('layer', function() {
+            var layer = layui.layer;
+            layer.open({
+                type: 1
+                ,title: false //不显示标题栏
+                ,closeBtn: false
+                ,area: ['600px', '380px']
+                ,shade: 0.8
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btn: '返回'
+                ,yes:function(){
+                    layer.closeAll();
+                }
+                ,btnAlign: 'c'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,content:"<div class=\"layui-card\">\n" +
+                    "                    <div class=\"layui-card-header\" style=\"border-left: solid #01aaed70;\">搜索结果</div>\n" +
+                    "                    <div class=\"layui-card-body\">\n" +serachcontent +
+                    "                    </div>\n" +
+                    "                </div>"
+
+            });
+        });
+
+
+    }
 </script>
 </body>
 
