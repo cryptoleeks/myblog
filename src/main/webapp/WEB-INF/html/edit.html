@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>EditorMD</title>
+    <title>写博客</title>
     <link rel="stylesheet" type="text/css" href="../static/plug-ins/lib/codemirror/codemirror.min.css"/>
     <script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../static/plug-ins/editormd.min.js"></script>
@@ -312,13 +312,19 @@ btn.click(function(){
                 for (var i in list) {
                     if (list[i].pid==pid){
                         var childlist=list[i].childList;
-                        for (var j in childlist){
-                            if (j==0){
-                                htmloptions+="<option selected value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
+                        if(childlist!=null&&childlist.length>0){
+                            for (var j in childlist){
+                                if (j==0){
+                                    htmloptions+="<option selected value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
+                                }
+                                else
+                                    htmloptions+="<option value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
                             }
-                            else
-                                htmloptions+="<option value=\""+childlist[j].sid+"\">"+childlist[j].sname+"</option>";
                         }
+                        else {
+                            htmloptions+="<option disabled value=\"0\">"+"暂无此二级类别"+"</option>";
+                        }
+
                     }
                 }
                 sonNode.html(htmloptions);

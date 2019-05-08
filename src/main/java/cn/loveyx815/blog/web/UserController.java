@@ -52,13 +52,13 @@ public class UserController {
    */
     public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response ) {
 
-        Map<String, String[]> parameterMap = request.getParameterMap();
+       /* Map<String, String[]> parameterMap = request.getParameterMap();
         Set<String> strings = parameterMap.keySet();
         JSONObject jsonObject=null;
-        jsonObject=JSONObject.parseObject(strings.iterator().next());
+        jsonObject=JSONObject.parseObject(strings.iterator().next());*/
 
         //JSON json = (JSON) JSON.parseObject(parameterMap.);
-        String username =  jsonObject.get("username").toString();
+        String username =  request.getParameter("username");
         //System.out.println(parameterMap);
         /*if (!params.isEmpty()){
             Map<String, Object> params1 = params.toSingleValueMap();
@@ -66,7 +66,7 @@ public class UserController {
             params.get("password").get(0);*//*
         }*/
 
-        String password =jsonObject.get("password").toString();
+        String password =request.getParameter("password");
         //根据前台的名称和密码去后台查找该人
         User user = userService.queryUser(username, password);
         if (user!=null){
