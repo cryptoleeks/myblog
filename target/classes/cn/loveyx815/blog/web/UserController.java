@@ -83,7 +83,7 @@ public class UserController {
                 jedis.expire(token,1800);
             }
             CookieUtil.setCookie(response,"token",token);
-            return Utils.JSONDataReturn(new ArrayList<Object>() , "200");
+            return Utils.JSONDataReturn("登录成功" , "200");
         }
         return Utils.JSONDataReturn("登录失败" , "301");
     }
@@ -180,7 +180,7 @@ public class UserController {
         }
 //            String url=path;
             JSONObject jsonObject=new JSONObject();
-            jsonObject.put("url","http://localhost:80/resources/upload/user/"+attach.getOriginalFilename());
+            jsonObject.put("url","http://localhost:8080/resources/upload/user/"+attach.getOriginalFilename());
             return Utils.JSONDataReturn(jsonObject,"200");
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
            // response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"/resources/upload/" + attach.getOriginalFilename() + "\"}");

@@ -57,7 +57,7 @@
 <!--
                         <button class="login100-form-btn">登 录</button>
 -->
-                        <button class="login100-form-btn" onclick="submitForm()" lay-filter="formDemo" >登录<i class="ai ai-enter"></i></button>
+                        <button class="login100-form-btn" onclick="submitForm()"  >登录</button>
                     </div>
                 </div>
 
@@ -92,13 +92,20 @@
 <script>
     //Demo
     var uri="localhost:8080/";
+    var layer;
+    layui.use('layer', function() {
+         layer = layui.layer;
 
+    });
+//{"username":$("#username").val(),"password":$("#password").val()}
     function submitForm(){
        // var form = new FormData($("#loginform"));
+        layer.msg('test');
         $.ajax({
             type: "POST",
             url: "/user/login",
             data: {"username":$("#username").val(),"password":$("#password").val()},
+            sync:false,
             dataType: "json",
             success: function(data){
                 if(data.code=="200"){
@@ -106,9 +113,9 @@
                         icon: 1,
                         time: 2000 //2秒关闭（如果不配置，默认是3秒）
                     }, function(){
-
+                        window.location.href="/index";
                     });
-                    window.location.href="/index";
+
 
                     //layer.open(uri+"/index");
                 }
@@ -120,7 +127,7 @@
             }
         });
     }
-    layui.use('form', function(){
+    /*layui.use('form', function(){
         var form = layui.form;
 
         //监听提交
@@ -152,7 +159,7 @@
             });
             return false;
         });
-    });
+    });*/
     layui.use('element', function() {
         var element = layui.element;
 

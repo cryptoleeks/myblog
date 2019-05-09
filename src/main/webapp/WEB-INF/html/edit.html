@@ -134,6 +134,9 @@ btn.click(function(){
 
                                 </select>
                             </div>
+                            <div class="layui-input-inline">
+                                <textarea  name="cover" id="cover" style="display: none"  ></textarea>
+                            </div>
                         </div>
                         <div class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo"
                              id="sendblog">发布
@@ -215,6 +218,8 @@ btn.click(function(){
             //监听提交
             form.on('submit(formDemo)', function (data) {
                 layer.msg(JSON.stringify(data.field));
+                var cover=getCookie("cover");
+                data.field.cover=cover;//添加博客封面
                 $.ajax({
                     type: "POST",
                     url: "/blog/save",
@@ -482,6 +487,40 @@ btn.click(function(){
 <script>
     //JavaScript代码区域
     var uri = "localhost:80/";
+    //Cookie方法
+    function setCookie(name, value, seconds) {
+        seconds = 180;   //seconds有值就直接赋值，没有为0，这个根php不一样。
+        var expires = "";
+        if (seconds != 0 ) {      //设置cookie生存时间
+            var date = new Date();
+            date.setTime(date.getTime()+(seconds*1000));
+            expires = "; expires="+date.toGMTString();
+        }
+        document.cookie = name+"="+escape(value)+expires+"; path=/";   //转码并赋值
+    }
+    function delCookie (name) {
+        var exp = new Date()
+        exp.setTime(exp.getTime() - 1)
+        var cval = setCookie(name)
+        if (cval && cval != null) {
+            document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+        }
+    }
+    function getCookie (name) {
+        if (document.cookie.length > 0) {
+            var begin = document.cookie.indexOf(name + '=')
+            if (begin !== -1) {
+                begin += name.length + 1 // cookie值的初始位置
+                var end = document.cookie.indexOf(';', begin) // 结束位置
+                if (end === -1) {
+                    end = document.cookie.length // 没有;则end为字符串结束位置
+                }
+                return unescape(document.cookie.substring(begin, end))
+            }
+        }
+        return null
+        // cookie不存在返回null
+    }
 
     window.onload = function () {
 

@@ -104,7 +104,7 @@ public class BlogController {
     */
     @RequestMapping(value = "/blog/save", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> saveBlog(@RequestBody String str, HttpServletRequest request) {
+    public Map<String, Object> saveBlog(@RequestBody String str, HttpServletRequest request,HttpServletResponse response) {
         String bq = "";//标签初始化
         Blog blog = new Blog();
         List<Lable> lableList = new ArrayList<>();
@@ -147,6 +147,7 @@ public class BlogController {
         String title = json.getString("title");
         String categoryselect = json.getString("categoryselect");
         String categoryselect2 = json.getString("categoryselect2");
+        String cover=json.getString("cover");
         String uid = null;
         //获取用户凭证
         Cookie token = CookieUtil.getCookie(request, "token");
@@ -158,7 +159,7 @@ public class BlogController {
             String jsonstr = jedis.get(cookiekey);
             JSONObject jsonObject = JSONObject.parseObject(jsonstr);
             uid = jsonObject.get("id").toString();//获取当前用户id
-
+            blog.setcPicAdr(cover);
             blog.setcContent(content);
             blog.setcMd(md);
             blog.setcLableId(bq);
@@ -169,6 +170,7 @@ public class BlogController {
             blog.setcSecondId(categoryselect2);
             blog.setId(UUID.randomUUID().toString());
             blogService.saveBlog(blog);
+            CookieUtil.removeCookie(request,response,"cover");
         } else {
             return Utils.JSONDataReturn("发布失败！", "300");
         }
@@ -189,13 +191,14 @@ public class BlogController {
             if (!filePath.exists()) {
                 filePath.mkdirs();
             }
-
+            String picadr="http://localhost:8080/resources/upload/"+attach.getOriginalFilename();
             //最终文件名
             File realFile = new File(rootPath + File.separator + attach.getOriginalFilename());
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
-
+            //保存博客内容临时图片路径
+            CookieUtil.setCookie(response,"cover",picadr);
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"http://localhost:80/resources/upload/" + attach.getOriginalFilename() + "\"}");
+            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + picadr+ "\"}");
         } catch (Exception e) {
             try {
                 response.getWriter().write("{\"success\":0}");

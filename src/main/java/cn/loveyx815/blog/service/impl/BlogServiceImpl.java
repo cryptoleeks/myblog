@@ -25,6 +25,7 @@ public class BlogServiceImpl implements BlogService {
 
     private Logger logger= LoggerFactory.getLogger(BlogDao.class);
 
+    @Override
     public List<Object> getCategory() {
         List<Map<String, Object>> category = dao.getCategory();
         List<Object> categoryList=new ArrayList<Object>();
@@ -61,6 +62,7 @@ public class BlogServiceImpl implements BlogService {
         return categoryList;
     }
 
+    @Override
     public void saveBlog(Blog blog){
         dao.insertSelective(blog);
 
@@ -71,18 +73,22 @@ public class BlogServiceImpl implements BlogService {
         lableDao.saveLable(lableList);
     }
 
+    @Override
     public Map<String ,Object>  getArticleById(String id){
         return dao.getArticleById(id);
     }
 
+    @Override
     public void addCountVisit(String id){
         dao.updateValueById(id);
     }
 
+    @Override
     public List<Blog> getBlogByKid(String kidid) {
         return null;
     }
 
+    @Override
     public Map<String, Object> getCategoryContentByPage(int curPage, int curSize, String tabid){
 
 
