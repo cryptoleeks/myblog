@@ -72,18 +72,45 @@
 
 
   </select>
-  <select id="getCategoryContentByPage" resultType="java.util.Map">
-    select
-    u.c_name,u.c_img_adr,b.id, b.c_title, b.c_content, b.c_uid, b.c_time,b.c_firstid,b.c_secondid, b.c_lable_id, b.c_pic_adr, b.c_value,count(c.c_ref_blog) comment,
-    code1.c_name fname,code2.c_name sname
+  <select id="getCategoryName" resultType="java.lang.String">
+      SELECT
+	case
+    when t.c_firstid=#{tabid} then fname
+    when t.c_secondid=#{tabid} then sname
+    when t.c_lable_id=#{tabid} then lname
+
+end  name
+from
+	( select
+    b.id,b.c_firstid,b.c_secondid, b.c_lable_id,
+    code1.c_name fname,code2.c_name sname,l.l_name lname
     from myblog.t_blog b
     LEFT JOIN myblog.t_comment c on c.c_ref_blog=b.id
     LEFT JOIN myblog.t_user u ON u.id=b.c_uid
     LEFT JOIN myblog.t_code code1 on code1.c_id=b.c_firstid
     LEFT JOIN myblog.t_code code2 ON code2.c_id=b.c_secondid
+    left join myblog.t_lable l on l.id=b.c_lable_id
     <where>
       b.c_firstid=#{tabid}
       or b.c_secondid=#{tabid}
+      or b.c_lable_id=#{tabid}
+    </where>) t
+			limit 0,1
+  </select>
+  <select id="getCategoryContentByPage" resultType="java.util.Map">
+    select
+    u.c_name,u.c_img_adr,b.id, b.c_title, b.c_content, b.c_uid, b.c_time,b.c_firstid,b.c_secondid, b.c_lable_id, b.c_pic_adr, b.c_value,count(c.c_ref_blog) comment,
+    code1.c_name fname,code2.c_name sname
+    from myblog.t_blog b
+    LEFT JOIN myblog.t_user u ON u.id=b.c_uid
+    LEFT JOIN myblog.t_comment c on c.c_ref_blog=b.id
+    LEFT JOIN myblog.t_code code1 on code1.c_id=b.c_firstid
+    LEFT JOIN myblog.t_code code2 ON code2.c_id=b.c_secondid
+    left join myblog.t_lable l on l.id=b.c_lable_id
+    <where>
+      b.c_firstid=#{tabid}
+      or b.c_secondid=#{tabid}
+      or b.c_lable_id=#{tabid}
     </where>
     GROUP BY b.id
     order by b.c_time
@@ -135,6 +162,7 @@
       <if test="tabid!=null">
         b.c_firstid = #{tabid,jdbcType=VARCHAR}
         or b.c_secondid = #{tabid,jdbcType=VARCHAR}
+        or b.c_lable_id = #{tabid,jdbcType=VARCHAR}
       </if>
     </where>
   </select>

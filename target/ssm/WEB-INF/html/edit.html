@@ -165,6 +165,7 @@ btn.click(function(){
 <script type="text/javascript">
     var uri = "localhost:8080";
     var flagson=false;
+    var form ;
     $(function () {
         editormd("test-editormd", {
             width: "90%",
@@ -179,7 +180,7 @@ btn.click(function(){
             saveHTMLToTextarea: true
         });
 
-       getSelect();
+        getSelect();
         getLableSelect();
         function getSelect() {
             $.ajax({
@@ -214,7 +215,7 @@ btn.click(function(){
         }
 
         layui.use('form', function () {
-            var form = layui.form;
+           form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function (data) {
                 layer.msg(JSON.stringify(data.field));
@@ -669,10 +670,35 @@ btn.click(function(){
     }
 
     function init() {
+        var flag=0;
         layui.use('element', function () {
             var element = layui.element;
 
         });
+        setInterval(function () {
+            var bqsize= $(".layui-icon-ok").size();
+            if (bqsize>=1){
+                //layer.msg("已添加了"+bqsize);
+                $("#category").attr("disabled",true);
+                $("#choosebq").attr("disabled",true);
+                $("#addbq").removeAttr('onclick');//去掉标签中的onclick事件
+                $("#category").addClass("layui-disabled");
+                $("#choosebq").addClass("layui-disabled");
+                $("#addbq").addClass("layui-disabled");
+                flag++;
+                form.render('select');
+            }
+            else if(bqsize==0&&flag>0){
+                $("#category").attr("disabled",false);
+                $("#choosebq").attr("disabled",false);
+                $("#addbq").attr('onclick',"addCategory('bq')");//去掉标签中的onclick事件
+                $("#category").removeClass("layui-disabled");
+                $("#choosebq").removeClass("layui-disabled");
+                $("#addbq").removeClass("layui-disabled");
+                flag--;
+                form.render('select');
+            }
+        },500);
     }
 </script>
 </body>

@@ -6,6 +6,7 @@
     <title></title>
     <script src="../layui/layui.js"></script>
     <link rel="stylesheet" href="../layui/css/layui.css" />
+    <link rel="stylesheet" href="/static/css/fixpage.css" />
     <script src="../static/js/jquery-1.8.3.min.js">
 
 
@@ -13,7 +14,7 @@
     </script>
 </head>
 
-<body style="background-color: #eeeeee;">
+<body >
 
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
@@ -99,6 +100,18 @@
 
                     </div>
                 </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">云标签</div>
+                    <div class="layui-card-body" id="cloudbq">
+                        <a class="layui-word-aux" href="" title="灰标签下有66篇文章">
+                            <span class="layui-badge layui-bg-gray ">灰(66)</span>
+                        </a>
+                        <a class="layui-word-aux" href="" title="设计模式标签下有66篇文章">
+                            <span class="layui-badge layui-bg-gray ">设计模式(66)</span>
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -129,6 +142,90 @@
 
     //JavaScript代码区域
     var uri="localhost:8080/";
+    function indexViewTab(list) {
+        var str = "";
+        for (var i in list) {
+            // var curtag="";
+            if (i == 0) {
+                str += "<li class=\"layui-this\" name=\"" + list[i].pid + "\">" + list[i].pname + "</li>";
+                getTabContent(list[i].pid);
+            } else {
+                str += "<li  name=\"" + list[i].pid + "\" >" + list[i].pname + "</li>";
+            }
+        }
+        $(".layui-tab-title").html(str);
+    }
+    function getCloudBQ() {
+        var bqcontent = $("#cloudbq");
+        $.ajax({
+            type: "GET",
+            url: "/blog/lable/bq",
+            dataType: "json",
+            success: function (data) {
+                bqcontent.html(data.data);
+            }
+        });
+    }
+        /*导航栏右上的用户信息状态*/
+        function userinfo() {
+            var strhtml = " <li class=\"layui-nav-item\"><a href=\"/blog/write\">写博客</a></li>"
+                + "<li class=\"layui-nav-item\"><a href=\"/message \">留言</a></li>";
+            $.ajax({
+                type: "GET",
+                url: "/user/cookie",
+                /*data: {username:$("#username").val(), content:$("#content").val()},*/
+                dataType: "json",
+                success: function (data) {
+                    if ("200" == data.code) {
+                        var jsondata = data.data;
+                        strhtml += " <li class=\"layui-nav-item\">\n" +
+                            "            <a href=\"/user/userinfo\">\n" + jsondata.cName +
+                            "            <img src=\"" + jsondata.cImgAdr + "\" class=\"layui-nav-img\"> </a>\n" +
+                            /*"            <dl class=\"layui-nav-child\">\n" +
+                            "            <dd>\n" +
+                            "            <a href=\"/userinfo/"+jsondata.id+"\">基本资料</a>\n" +
+                            "            </dd>\n" +
+                            "            <dd>\n" +
+                            "            <a href=\"/userinfo/blog/"+jsondata.id+"\">我的博客</a>\n" +
+                            "            </dd>\n" +
+                            "            <dd>\n" +
+                            "            <a href=\"/userinfo/comment/"+jsondata.id+"\">我的评论</a>\n" +
+                            "            </dd>\n" +
+                            "            <dd>\n" +
+                            "            <a href=\"/userinfo/password/"+jsondata.id+"\">密码修改</a>\n" +
+                            "            </dd>\n" +
+                            "            </dl>\n" +*/
+                            "            </li>\n" +
+                            "            <li class=\"layui-nav-item\">\n" +
+                            "            <a href=\"" + "/user/logout" + "\">退了</a>\n" +
+                            "            </li>";
+
+                    } else {
+                        strhtml += "<li class=\"layui-nav-item\">\n" +
+                            "                                <a href=\"" + "" + "/blog/login" + "\">登录</a>\n" +
+                            "                                <li class=\"layui-nav-item\">\n" +
+                            "                                <a href=\"/user/register\">注册</a>\n" +
+                            "                                </li>"
+                    }
+                    $("#userinfo").html(strhtml);
+                }
+            });
+        }
+
+        /*首页面板展现Tab*/
+
+
+        function init() {
+            layui.use('element', function () {
+                var element = layui.element;
+                //tab切换监听
+                element.on('tab(tabfilter)', function (data) {
+                    var tabid = this.getAttribute('name');
+                    $("#tabcontent").html("");
+                    getTabContent(tabid);
+                });
+            });
+        }
 
     window.onload=function() {
 
@@ -159,100 +256,15 @@
                 strhtml += "</li></ul>";
                 indexViewTab(list);
                 userinfo();
+                getCloudBQ();
                 $(".header_centent").html(strhtml);
                 init();
             }
         });
+
+
     }
 
-
-            //
-        /*function userLogin() {
-            $.ajax({
-                type: "GET",
-                url: "/user/login",
-                /!*data: {username:$("#username").val(), content:$("#content").val()},*!/
-                dataType: "json",
-                success: function(data){
-
-                }
-
-        }*/
-
-        /*导航栏右上的用户信息状态*/
-        function userinfo() {
-            var strhtml=" <li class=\"layui-nav-item\"><a href=\"/blog/write\">写博客</a></li>"
-                +"<li class=\"layui-nav-item\"><a href=\"/message \">留言</a></li>";
-            $.ajax({
-                type: "GET",
-                url: "/user/cookie",
-                /*data: {username:$("#username").val(), content:$("#content").val()},*/
-                dataType: "json",
-                success: function(data){
-                    if("200"==data.code){
-                        var jsondata=data.data;
-                        strhtml+=" <li class=\"layui-nav-item\">\n" +
-                            "            <a href=\"/user/userinfo\">\n"+ jsondata.cName +
-                            "            <img src=\""+ jsondata.cImgAdr+"\" class=\"layui-nav-img\"> </a>\n" +
-                            /*"            <dl class=\"layui-nav-child\">\n" +
-                            "            <dd>\n" +
-                            "            <a href=\"/userinfo/"+jsondata.id+"\">基本资料</a>\n" +
-                            "            </dd>\n" +
-                            "            <dd>\n" +
-                            "            <a href=\"/userinfo/blog/"+jsondata.id+"\">我的博客</a>\n" +
-                            "            </dd>\n" +
-                            "            <dd>\n" +
-                            "            <a href=\"/userinfo/comment/"+jsondata.id+"\">我的评论</a>\n" +
-                            "            </dd>\n" +
-                            "            <dd>\n" +
-                            "            <a href=\"/userinfo/password/"+jsondata.id+"\">密码修改</a>\n" +
-                            "            </dd>\n" +
-                            "            </dl>\n" +*/
-                            "            </li>\n" +
-                            "            <li class=\"layui-nav-item\">\n" +
-                            "            <a href=\""+"/user/logout"+"\">退了</a>\n" +
-                            "            </li>";
-
-                    }
-                    else {
-                        strhtml+="<li class=\"layui-nav-item\">\n" +
-                            "                                <a href=\""+""+"/blog/login"+"\">登录</a>\n" +
-                            "                                <li class=\"layui-nav-item\">\n" +
-                            "                                <a href=\"/user/register\">注册</a>\n" +
-                            "                                </li>"
-                    }
-                    $("#userinfo").html(strhtml);
-                }
-            });
-        }
-
-    /*首页面板展现Tab*/
-    function indexViewTab(list) {
-        var str="";
-        for (var i in list){
-            // var curtag="";
-            if(i==0){
-                str+="<li class=\"layui-this\" name=\""+list[i].pid+"\">"+list[i].pname+"</li>";
-                getTabContent(list[i].pid);
-            }
-            else {
-                str+="<li  name=\""+list[i].pid+"\" >"+list[i].pname+"</li>";
-            }
-        }
-        $(".layui-tab-title").html(str);
-    }
-           function init(){
-               layui.use('element', function() {
-                   var element = layui.element;
-                   //tab切换监听
-                   element.on('tab(tabfilter)', function(data){
-                       var tabid=this.getAttribute('name');
-                       $("#tabcontent").html("");
-                       getTabContent(tabid);
-
-                   });
-               });
-           }
 </script>
 <script>
     //设置cookie

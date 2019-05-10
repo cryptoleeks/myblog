@@ -105,6 +105,8 @@ public class BlogServiceImpl implements BlogService {
             int i=0;
             map=new HashMap<>();
             String category="";
+            String sname="";
+            String pname="";
             for (Map<String,Object> comment:list) {
 
 
@@ -127,7 +129,8 @@ public class BlogServiceImpl implements BlogService {
                         "                                                $(\"#abstract"+comment.get("id") +"\").text($('#hide"+comment.get("id") +"')[0].textContent);\n" +
                         "                                            </script>\n"+"<div class=\"layui-row\">\n"+
                         "<div class=\"layui-col-md5\">\n"+
-                        " <i class=\"layui-icon  layui-word-aux\">&#xe770;"+comment.get("c_name") +"</i>\n"+
+                       /* " <i class=\"layui-icon  layui-word-aux\">&#xe770;"+comment.get("c_name") +"</i>\n"+*/
+                        " <img src=\""+comment.get("c_img_adr")+"\" title=\""+comment.get("c_name")+"\" style=\" width: 24px;height: 24px;\"  class=\"layui-nav-img\">"+comment.get("c_name")+
                         " <i class=\"layui-icon layui-word-aux\">&#xe637;"+comment.get("c_time")+"</i>\n"+"</div>"+
                         " <div class=\"layui-col-md3 layui-col-md-offset4\">"+
                         " <i class=\"layui-icon layui-word-aux\">&#xe60e;"+comment.get("c_value") +"</i>\n"+
@@ -138,28 +141,11 @@ public class BlogServiceImpl implements BlogService {
                         "                                    </div>\n"+
                         "                                </div>\n"+
                         "                            </div>";
-
-
-
-
-
-
-
-
-
-
-
-
-
                 i++;
 
             }
-            if (list.get(0).get("sname")!=null){
-                category= (String) list.get(0).get("sname");
-            }
-            else {
-                category=list.get(0).get("fname").toString();
-            }
+            category=dao.getCategoryName(tabid);
+
             map.put("category",category);
             map.put("content",content);
         }

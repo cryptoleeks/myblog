@@ -34,7 +34,7 @@ public class SessionFilter extends OncePerRequestFilter {
 
         // 不过滤的uri
         String[] notFilter = new String[] { "login", "index" ,"category","cookie","error","logout","view","tab","comment"
-                                            ,"admin","serach"};
+                                            ,"admin","serach","lable/bq"};
 
         // 请求的uri
         String uri = request.getRequestURI();

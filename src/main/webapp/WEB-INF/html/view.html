@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../static/js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../static/plug-ins/editormd.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/plug-ins/css/editormd.css"/>
+    <link rel="stylesheet" href="/static/css/fixpage.css" />
     <link rel="stylesheet" href="../layui/css/layui.css"/>
     <script src="../layui/layui.js"></script>
     <!--<script type="text/javascript">
@@ -131,22 +132,25 @@
                 <div class="layui-row">
                     <div class="layui-card">
                         <div class="layui-container">
-                            <div class="layui-col-md8 layui-col-md-offset2">
+                            <div class="layui-col-md9 layui-col-md-offset1" id="showpanel">
                                 <!--显示面板-->
                                 <div class="layui-row">
-                                    <div class="layui-card-header" id="blogtitle">
+                                    <h1>
+                                        <div class="layui-card-header" id="blogtitle">
 
-                                    </div>
-                                    <div  style="float: right">
-                                        作者：<span id="people"></span>
-                                        时间：<span id="time"></span>
-                                        浏览量：<span id="value"></span>
+                                        </div>
+                                    </h1>
+
+                                    <div  style="float: right;font-size: 14px;">
+                                        作者：<span id="people" class="layui-word-aux"></span>
+                                        时间：<span id="time" class="layui-word-aux"></span>
+                                        浏览量：<span id="value"  class="layui-word-aux"></span>
                                     </div>
                                 </div>
 
-                                <div class="layui-card-body">
+                                <div class="layui-card-body" style="padding-left: 0px;padding-right: 0px;">
                                     <!--在该div中展示,如有初始化的数据可以放在textarea中-->
-                                    <div id="testEditorMdview">
+                                    <div id="testEditorMdview" style="padding: 0px;">
                                         <textarea id="appendTest" style="display:none;"></textarea>
                                     </div>
                                 </div>

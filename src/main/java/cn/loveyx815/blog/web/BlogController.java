@@ -4,6 +4,7 @@ import cn.loveyx815.blog.entity.Blog;
 import cn.loveyx815.blog.entity.Lable;
 import cn.loveyx815.blog.service.BlogService;
 import cn.loveyx815.blog.service.CommentService;
+import cn.loveyx815.blog.service.LableService;
 import cn.loveyx815.blog.util.CookieUtil;
 import cn.loveyx815.blog.util.RedisUtil;
 import cn.loveyx815.blog.util.Utils;
@@ -31,6 +32,8 @@ import java.util.*;
 public class BlogController {
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private LableService lableService;
     @Autowired
     private CommentService commentService;
 
@@ -69,6 +72,14 @@ public class BlogController {
         return Utils.JSONDataReturn(map,"200");
     }
 
+    @RequestMapping(value = "/blog/lable", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getIndexLableCount() {
+        return Utils.JSONDataReturn(blogService.getCategory(), "200");
+
+        // return blogService.getCategory();
+    }
+
     @RequestMapping(value = "/blog/category", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getIndexCategory() {
@@ -77,10 +88,10 @@ public class BlogController {
         // return blogService.getCategory();
     }
 
-    @RequestMapping(value = "/blog/lable", method = RequestMethod.GET)
+    @RequestMapping(value = "/blog/lable/bq", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getLable() {
-        return Utils.JSONDataReturn(blogService.getLable(), "200");
+        return Utils.JSONDataReturn(lableService.getLable(), "200");
 
         // return blogService.getCategory();
     }
