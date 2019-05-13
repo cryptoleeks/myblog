@@ -290,6 +290,7 @@ iframe {
 /*------------------------------------------------------------------
 [ Button ]*/
 .container-login100-form-btn {
+    margin-top: 32px;
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -300,6 +301,7 @@ iframe {
 }
 
 .wrap-login100-form-btn {
+
     width: 100%;
     display: block;
     position: relative;

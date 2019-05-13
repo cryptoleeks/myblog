@@ -325,10 +325,13 @@ from
   </update>
   <select id="getArticleById" parameterType="java.lang.String" resultType="java.util.Map">
   select
-   b.id, b.c_title, b.c_content, b.c_md,b.c_uid, b.c_time, b.c_lable_id, b.c_value
+   b.id, b.c_title, b.c_content, b.c_md,b.c_uid, b.c_time, b.c_lable_id lid,l.l_name lname,code1.c_name fname,code1.c_id fid,code2.c_name sname,code2.c_id sid, b.c_value
     ,u.c_name name
   from myblog.t_blog b
   left join myblog.t_user u on b.c_uid=u.id
+  left join myblog.t_lable l on b.c_lable_id=l.id
+  left join myblog.t_code code1 on b.c_firstid=code1.c_id
+  left join myblog.t_code code2 on b.c_secondid=code2.c_id
   where b.id = #{id,jdbcType=VARCHAR}
   </select>
 

@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../static/plug-ins/editormd.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/plug-ins/css/editormd.css"/>
     <link rel="stylesheet" href="/static/css/fixpage.css" />
+    <link rel="stylesheet" href="/static/css/view.css" />
     <link rel="stylesheet" href="../layui/css/layui.css"/>
     <script src="../layui/layui.js"></script>
     <!--<script type="text/javascript">
@@ -135,20 +136,26 @@
                             <div class="layui-col-md9 layui-col-md-offset1" id="showpanel">
                                 <!--显示面板-->
                                 <div class="layui-row">
-                                    <h1>
-                                        <div class="layui-card-header" id="blogtitle">
 
+                                        <div class="layui-card-header" >
+                                            <div class="layui-col-md6">
+                                                <h1 id="blogtitle"></h1>
+                                            </div>
+                                            <div  style="float: right;font-size: 14px;">
+                                                作者：<span id="people" class="layui-word-aux"></span>
+                                                时间：<span id="time" class="layui-word-aux"></span>
+                                                浏览量：<span id="value"  class="layui-word-aux"></span>
+                                            </div>
                                         </div>
-                                    </h1>
 
-                                    <div  style="float: right;font-size: 14px;">
-                                        作者：<span id="people" class="layui-word-aux"></span>
-                                        时间：<span id="time" class="layui-word-aux"></span>
-                                        浏览量：<span id="value"  class="layui-word-aux"></span>
-                                    </div>
+
+
+                                    <hr>
                                 </div>
 
                                 <div class="layui-card-body" style="padding-left: 0px;padding-right: 0px;">
+                                    <div class="layui-row " id="blogproperty">
+                                    </div>
                                     <!--在该div中展示,如有初始化的数据可以放在textarea中-->
                                     <div id="testEditorMdview" style="padding: 0px;">
                                         <textarea id="appendTest" style="display:none;"></textarea>
@@ -167,7 +174,6 @@
                                     <hr>
                                     <div id="commentlist">
                                         <div class="layui-row">
-                                            <ul class="flow-default" id="comment1"><span name="span1">zhanghao:</span>我要上班<span style="float: right" name="date1">日期：2019/4/1</span></ul>
                                         </div>
                                         <hr>
                                     </div>
@@ -210,14 +216,15 @@
     var key="";
     var layer;
     //key为cookie的名称， val为cookie的值， time为过期时间（单位为秒）
-    function setCookie(key, val, time) {
-        if (typeof key !== 'string' || typeof val !== 'string' ) {
-            return false;
+    function setCookie(name, value, seconds) {
+        seconds = 180;   //seconds有值就直接赋值，没有为0，这个根php不一样。
+        var expires = "";
+        if (seconds != 0 ) {      //设置cookie生存时间
+            var date = new Date();
+            date.setTime(date.getTime()+(seconds*1000));
+            expires = "; expires="+date.toGMTString();
         }
-        time = time || 7 * 24 * 3600;
-        var exp = new Date();
-        exp.setTime(exp.getTime() + time * 1000);
-        document.cookie = key + '=' + val + ';expires=' + exp.toGMTString();
+        document.cookie = name+"="+escape(value)+expires+"; path=/";   //转码并赋值
     }
     function getBlogId() {
         var arr1 = document.cookie.split("; ");//由于cookie是通过一个分号+空格的形式串联起来的，所以这里需要先按分号空格截断,变成[name=Jack,pwd=123456,age=22]数组类型；
@@ -259,13 +266,29 @@
             dataType: "json",
             success: function (data) {
                 var blog=data.data;
+                //添加文章属性徽章
+                var blogproperty=$("#blogproperty");
+                var fpropertyhtml="";//一级类别属性html
+                var spropertyhtml="";//二级类别属性html
+                var lpropertyhtml="";//标签属性html
                 if (data.code=="200"){
                     $("#blogtitle").text(blog.c_title);
                     $("#people").text(blog.name);
                     $("#time").text(blog.c_time);
                     $("#value").text(blog.c_value);
-                    mdToHml(blog.c_content);
+                    if(blog.fname!=null&&blog.fid!=null){
+                    fpropertyhtml+="<a title=\""+blog.fname+"\" href=\"/blog/viewlink\" onclick=\"setCookie('categoryid','"+blog.fid+"')\"><span class=\"layui-badge\">"+blog.fname+"</span></a>";
+                    }
+                    if(blog.sname!=null&&blog.sid!=null){
+                        spropertyhtml+="<a title=\""+blog.sname+"\" href=\"/blog/viewlink\" onclick=\"setCookie('categoryid','"+blog.sid+"')\"><span class=\"layui-badge layui-bg-green\">"+blog.sname+"</span></a>";
 
+                    }
+                    if(blog.lname!=null&&blog.lid!=null){
+                        lpropertyhtml+="<a title=\""+blog.lname+"\" href=\"/blog/viewlink\" onclick=\"setCookie('categoryid','"+blog.lid+"')\"><span class=\"layui-badge layui-bg-blue\">"+blog.lname+"</span></a>";
+
+                    }
+                    blogproperty.html(fpropertyhtml+spropertyhtml+lpropertyhtml);
+                    mdToHml(blog.c_content);
                 }
             }
         })
@@ -500,6 +523,8 @@
 
             //layer.msg('hello');
         });
+
+
     }
 </script>
 </body>
