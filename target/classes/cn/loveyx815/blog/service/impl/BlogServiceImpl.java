@@ -119,12 +119,12 @@ public class BlogServiceImpl implements BlogService {
                         "                                <div class=\"layui-col-md9\">\n" +
                         "                                    <div class=\"layui-card\">\n" +
                         "                                        <div class=\"layui-card-header\">"+
-                                                                "<a href=\"/view/"+comment.get("id")+"\"><h2>标题："+comment.get("c_title")+"</h2></a>"
+                                                                "<a href=\"/view/"+comment.get("id")+"\"><h2>"+comment.get("c_title")+"</h2></a>"
                                                                     +"</div>\n" +
                         "                                        <div class=\"layui-card-body\">\n" +
                         "                                            <div class=\"layui-elip\" id=\"abstract"+comment.get("id") +"\">\n" +
                         "                                            </div>\n" +
-                        "                                            <div class=\"layui-hide\t\" id=\"hide"+comment.get("id") +"\">内容："+comment.get("c_content") +"</div>\n" +
+                        "                                            <div class=\"layui-hide\t\" id=\"hide"+comment.get("id") +"\">"+comment.get("c_content") +"</div>\n" +
                         "                                            <script>\n" +
                         "                                                $(\"#abstract"+comment.get("id") +"\").text($('#hide"+comment.get("id") +"')[0].textContent);\n" +
                         "                                            </script>\n"+"<div class=\"layui-row\">\n"+
@@ -202,12 +202,12 @@ public class BlogServiceImpl implements BlogService {
                         "                                <div class=\"layui-col-md9\">\n" +
                         "                                    <div class=\"layui-card\">\n" +
                         "                                        <div class=\"layui-card-header\">"+
-                        "<a href=\"/view/"+comment.get("id")+"\"><h3>标题："+comment.get("c_title")+"</h3></a>"
+                        "<a href=\"/view/"+comment.get("id")+"\"><h3>"+comment.get("c_title")+"</h3></a>"
                         +"</div>\n" +
                         "                                        <div class=\"layui-card-body\">\n" +
                         "                                            <div class=\"layui-elip\" id=\"serachabstract"+comment.get("id") +"\">\n" +
                         "                                            </div>\n" +
-                        "                                            <div class=\"layui-hide\t\" id=\"serachhide"+comment.get("id") +"\">内容："+comment.get("c_content") +"</div>\n" +
+                        "                                            <div class=\"layui-hide\t\" id=\"serachhide"+comment.get("id") +"\">"+comment.get("c_content") +"</div>\n" +
                         "                                            <script>\n" +
                         "                                                $(\"#serachabstract"+comment.get("id") +"\").text($('#serachhide"+comment.get("id") +"')[0].textContent);\n" +
                         "                                            </script>\n"+"<div class=\"layui-row\">\n"+

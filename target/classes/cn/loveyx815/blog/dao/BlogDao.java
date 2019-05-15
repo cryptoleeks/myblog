@@ -82,4 +82,6 @@ public interface BlogDao {
     int getCountBySerach(@Param("serach") String serachstr);
 
     List<Map<String, Object>> getAllSerach(@Param("serach")String serachstr);
+
+    String  getCategoryName(@Param("tabid") String tabid);
 }

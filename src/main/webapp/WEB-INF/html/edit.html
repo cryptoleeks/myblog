@@ -67,9 +67,9 @@ btn.click(function(){
                 <li class="layui-this">写博客</li>
             </ul>
             <div class="layui-tab-content" style="height: 100px;">
-                <form class="layui-form layui-form-pane" action="">
+                <form class="layui-form layui-form-pane" action="" style="margin-bottom: 35px;">
                     <div class="layui-col-md layui-col-md-offset1">
-                        <div class="layui-tab-item layui-show">
+                        <div class="layui-tab-item layui-show" style="background-color: white;padding-top: 38px; padding-bottom: 38px;">
                             <div class="layui-row">
                                 <div class="layui-input-block"
                                      style="width: 80%;margin-left: 103px; margin-bottom: 13px;">
@@ -91,57 +91,57 @@ btn.click(function(){
                                 <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
                                 <textarea class="editormd-html-textarea" name="text"></textarea>
                             </div>
+                            <div class="">
+                                <div class="layui-row">
+                                    <div class="layui-col-md1 " style=" margin-left: 101px;" align="centent">
+                                        <label class="">标签添加：</label>
+                                        <br><label class="">或</label>
+                                        <br><label class="">选择已有标签：</label>
+                                    </div>
+                                    <div class="layui-col-md3" style="margin-left: 1px;">
 
+                                        <input type="text" id="category" placeholder="请输入标签" autocomplete="off"
+                                               class="layui-input">
+                                        <select name="choosebq" id="choosebq" lay-verify="" lay-search lay-filter="choosebq">
+                                            <option value="">选择已有的标签</option>
+
+
+                                        </select>
+                                        <div class="layui-btn" id="addbq" onclick="addCategory('bq')">添加标签
+
+                                        </div>
+                                        <div class="layui-input-block" id="catelist">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md1" style=" margin-left: 101px;">
+                                        <label class="">文章分类：</label>
+                                    </div>
+                                    <div class="layui-col-md3" style="margin-left: 1px;">
+                                        <select name="categoryselect" lay-verify="" lay-filter="select_parent">
+                                            <option value="">请选择您的文章分类</option>
+
+                                        </select>
+                                        <select name="categoryselect2" id="categoryselect2" lay-filter="select_second" >
+                                            <option value="">请选择您的文章分类</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <textarea  name="cover" id="cover" style="display: none"  ></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo"
+                                     id="sendblog" style=" margin-left: 100px;">发布
+                                </div>
+                            </div>
 
                         </div>
 
                     </div>
-                    <div class="layui-col-md5 layui-col-md-offset2">
-                        <div class="layui-row">
-                            <div class="layui-col-md2" align="centent">
-                                <label class="">标签添加：</label>
-                                <br><label class="">或</label>
-                                <br><label class="">选择已有标签：</label>
-                            </div>
-                            <div class="layui-col-md9" style="margin-left: 1px;">
 
-                                <input type="text" id="category" placeholder="请输入标签" autocomplete="off"
-                                       class="layui-input">
-                                <select name="choosebq" id="choosebq" lay-verify="" lay-search lay-filter="choosebq">
-                                    <option value="">选择已有的标签</option>
-
-
-                                </select>
-                                <div class="layui-btn" id="addbq" onclick="addCategory('bq')">添加标签
-
-                                </div>
-                                <div class="layui-input-block" id="catelist">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-row">
-                            <div class="layui-col-md2">
-                                <label class="">文章分类：</label>
-                            </div>
-                            <div class="layui-col-md9" style="margin-left: 1px;">
-                                <select name="categoryselect" lay-verify="" lay-filter="select_parent">
-                                    <option value="">请选择您的文章分类</option>
-
-                                </select>
-                                <select name="categoryselect2" id="categoryselect2" lay-filter="select_second" >
-                                    <option value="">请选择您的文章分类</option>
-
-                                </select>
-                            </div>
-                            <div class="layui-input-inline">
-                                <textarea  name="cover" id="cover" style="display: none"  ></textarea>
-                            </div>
-                        </div>
-                        <div class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo"
-                             id="sendblog">发布
-                        </div>
-                    </div>
                 </form>
             </div>
 
@@ -152,9 +152,10 @@ btn.click(function(){
 
     </div>
 </div>
-<div class="layui-footer" style="left: 0px">
+<div class="layui-footer layui-row" style=" background-color:#eeeeee;   bottom: 0px;
+    position: fixed;width: 100%;height: 35px;">
     <!-- 底部固定区域 -->
-    <div class="layui-col-md-offset5">
+    <div class="" style="    margin-left: 45%;    margin-top: 10px;">
         © loveyx815.cn - Blog Web
     </div>
 
@@ -163,9 +164,10 @@ btn.click(function(){
 
 
 <script type="text/javascript">
-    var uri = "localhost:8080";
+
     var flagson=false;
     var form ;
+    var limitbqflag;
     $(function () {
         editormd("test-editormd", {
             width: "90%",
@@ -273,9 +275,7 @@ btn.click(function(){
             //监听文章类别，级联操作
 
             form.on('select(select_parent)', function(data){
-                console.log(data.elem); //得到select原始DOM对象
-                console.log(data.value); //得到被选中的值
-                console.log(data.othis); //得到美化后的DOM对象
+                clearInterval(limitbqflag);
                 changeSonselect(data.value,form);
                 form.render('select');
                 form.render('select');
@@ -343,6 +343,7 @@ btn.click(function(){
         });
     }
     function addCategoryBySelect(code, title) {
+        limitBQNode();
         var catetext = $("#category");
         var catelist = $("#catelist");
         var newinput = document.createElement("input");
@@ -668,14 +669,9 @@ btn.click(function(){
 
 
     }
-
-    function init() {
+    function limitBQNode() {
         var flag=0;
-        layui.use('element', function () {
-            var element = layui.element;
-
-        });
-        setInterval(function () {
+        limitbqflag=setInterval(function () {
             var bqsize= $(".layui-icon-ok").size();
             if (bqsize>=1){
                 //layer.msg("已添加了"+bqsize);
@@ -699,6 +695,18 @@ btn.click(function(){
                 form.render('select');
             }
         },500);
+        setTimeout(function () {
+            clearInterval(limitbqflag)
+        },500);
+    }
+
+    function init() {
+
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+
     }
 </script>
 </body>

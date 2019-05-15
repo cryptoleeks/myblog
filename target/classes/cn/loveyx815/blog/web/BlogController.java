@@ -75,7 +75,7 @@ public class BlogController {
     @RequestMapping(value = "/blog/lable", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getIndexLableCount() {
-        return Utils.JSONDataReturn(blogService.getCategory(), "200");
+        return Utils.JSONDataReturn(blogService.getLable(), "200");
 
         // return blogService.getCategory();
     }
