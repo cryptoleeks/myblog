@@ -214,8 +214,8 @@
             dataType: "json",
             success: function(data){
                 layer.msg(data.data);
-                table.reload("blogtable", options);
-
+                //table.reload("blogtable", options);
+                window.location.reload();
             }})
     }
 
@@ -260,14 +260,22 @@
                         }
                         for (var i in tabledata ) {
                             //var path="/admin/user/del/"+tabledata[i].id;
+                            var id,title,time,fname,sname,bq,username;
+                            id=tabledata[i].id!=undefined?tabledata[i].id:'无';
+                            title=tabledata[i].title!=undefined?tabledata[i].title:'无';
+                            time=tabledata[i].time!=undefined?tabledata[i].time:'无';
+                            fname=tabledata[i].fname!=undefined?tabledata[i].fname:'无';
+                            sname=tabledata[i].sname!=undefined?tabledata[i].sname:'无';
+                            bq=tabledata[i].bq!=undefined?tabledata[i].bq:'无';
+                            username=tabledata[i].username!=undefined?tabledata[i].username:'无';
                             str+="<tr>\n" +
-                                "                        <td>"+tabledata[i].id+"</td>\n" +
-                                "                        <td>"+tabledata[i].title+"</td>\n" +
-                                "                        <td>"+tabledata[i].time+"</td>\n" +
-                                "                        <td>"+tabledata[i].fname+"</td>\n" +
-                                "                        <td>"+tabledata[i].sname+"</td>\n" +
-                                "                        <td>"+tabledata[i].bq+"</td>\n" +
-                                "                        <td>"+tabledata[i].username+"</td>\n" +
+                                "                        <td>"+id+"</td>\n" +
+                                "                        <td>"+title+"</td>\n" +
+                                "                        <td>"+time+"</td>\n" +
+                                "                        <td>"+fname+"</td>\n" +
+                                "                        <td>"+sname+"</td>\n" +
+                                "                        <td>"+bq+"</td>\n" +
+                                "                        <td>"+username+"</td>\n" +
 
                                 "                        <td>\n" +
                                     "<a class=\"layui-btn layui-btn-primary layui-btn-xs\" onclick=\"catBlog('"+tabledata[i].id+"')\" >查看</a>"+

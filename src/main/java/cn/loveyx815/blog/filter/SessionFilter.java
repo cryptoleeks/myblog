@@ -33,7 +33,7 @@ public class SessionFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // 不过滤的uri
-        String[] notFilter = new String[] { "login", "index" ,"category","cookie","error","logout","view","tab","comment"
+        String[] notFilter = new String[] { "login", "index" ,"category","cookie","error","logout","view","tab","blog/comment"
                                             ,"admin","serach","lable/bq"};
 
         // 请求的uri

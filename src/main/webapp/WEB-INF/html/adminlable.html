@@ -116,7 +116,8 @@
                     success: function(data){
                         if (data.code=="200"){
                             layer.msg("成功")
-                            table.reload("labletable", options);
+                            //table.reload("labletable", options);
+                            window.location.reload();
                             layer.closeAll();
                         }
 
@@ -152,7 +153,8 @@
                     success: function(data){
                         if (data.code=="200"){
                             layer.msg("添加成功")
-                            table.reload("labletable", options);
+                            //table.reload("labletable", options);
+                            window.location.reload();
                             layer.closeAll();
                         }
 
@@ -177,8 +179,8 @@
             dataType: "json",
             success: function(data){
                 layer.msg(data.data);
-                table.reload("labletable", options);
-
+               // table.reload("labletable", options);
+                window.location.reload();
             }})
     }
 

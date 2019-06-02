@@ -1,0 +1,12 @@
+INSERT INTO `t_user` VALUES ('0e8f8c55-aebf-47c1-b231-59b1f56f448c', 'user', '马华疼', '123', 0, 'http://localhost:8080/resources/upload/user/3.png', '马华疼', '马华疼', NULL, NULL, '2019-4-28', NULL, NULL, '2019-4-3', NULL);
+INSERT INTO `t_user` VALUES ('1f1681cf-8241-41d3-b516-9af6560e291f', 'user', 'bbu', '123', 1, 'http://localhost:8080/resources/upload/user/bbu.png', '蚌埠学院', '蚌埠学院官方博客！', NULL, NULL, '2019-5-2', NULL, NULL, '2019-4-1', NULL);
+INSERT INTO `t_user` VALUES ('2c65197d-d4e4-4843-8cad-ee85606466fd', 'user', 'chw', '159', 1, '', 'asd', '123', NULL, NULL, '2019-5-5', NULL, NULL, NULL, NULL);
+INSERT INTO `t_user` VALUES ('3326814a-2e87-432b-9b68-9917f7526926', 'user', '1996536648', '667788', 0, '', '小宝贝', '', NULL, NULL, '2019-5-11', NULL, NULL, '1996-11-10', NULL);
+INSERT INTO `t_user` VALUES ('35674c56-2f92-4950-82fd-c42c16c6b50d', 'user', '王深', '123', 1, 'http://localhost:8080/resources/upload/user/3.png', '祖安小深', '骚气', NULL, NULL, '2019-4-28', NULL, NULL, '2019-4-4', NULL);
+INSERT INTO `t_user` VALUES ('3f143ccd-3047-4ee4-8e7c-0d4f25f1e2a7', 'user', '罗永浩', '123', 1, 'http://localhost:8080/resources/upload/user/2.png', '罗永浩', '锤子柯基懂事', NULL, NULL, '2019-5-1', NULL, NULL, '2018-12-5', NULL);
+INSERT INTO `t_user` VALUES ('585257b0-6a24-4520-a309-281a57478826', 'user', '库克', '123', 1, 'http://localhost:8080/resources/upload/user/bbu.png', '库克', '苹果懂事', NULL, NULL, '2019-5-1', NULL, NULL, '2012-5-1', NULL);
+INSERT INTO `t_user` VALUES ('5f33cb02-0b0e-49a4-a722-1cf751323119', 'user', 'Jobs', '123', 1, 'http://localhost:8080/resources/upload/user/3.png', 'Jobs', '苹果懂事', NULL, NULL, '2019-5-1', NULL, NULL, '2012-5-1', NULL);
+INSERT INTO `t_user` VALUES ('75d8236e-7eee-4622-9215-2c883742efee', 'user', '马云云', '123', 1, 'http://localhost:8080/resources/upload/user/2.png', 'mayun', '蚂蚁懂事', NULL, NULL, '2019-5-1', NULL, NULL, '2013-5-1', NULL);
+INSERT INTO `t_user` VALUES ('afac49fd-8c30-4e3b-a21c-646d92b48608', 'user', '雷军', '123', 1, 'http://localhost:8080/resources/upload/user/3.png', '猴王', '花果山', NULL, NULL, '2019-4-28', NULL, NULL, '2019-4-2', NULL);
+INSERT INTO `t_user` VALUES ('b24514b2-8297-4024-92f9-f65494e2abaf', 'user', '张一鸣', '123', 1, 'http://localhost:8080/resources/upload/user/3.png', '222', '888', NULL, NULL, '2019-4-28', NULL, NULL, '2019-4-2', NULL);
+INSERT INTO `t_user` VALUES ('cda47134-d341-4f42-9365-1ad58525b1e0', 'user', '施勇刚', '666', 1, 'http://localhost:8080/resources/upload/user/3.png', '232', '2222', NULL, NULL, '2019-4-26', NULL, NULL, '1997-4-2', NULL);

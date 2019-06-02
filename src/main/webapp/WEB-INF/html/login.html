@@ -91,7 +91,7 @@
 </body>
 <script>
     //Demo
-    var uri="localhost:8080/";
+    var uri="localhost:80/";
     var layer;
     layui.use('layer', function() {
          layer = layui.layer;
@@ -100,7 +100,7 @@
 //{"username":$("#username").val(),"password":$("#password").val()}
     function submitForm(){
        // var form = new FormData($("#loginform"));
-        layer.msg('test');
+      //  layer.msg('test');
         $.ajax({
             type: "POST",
             url: "/user/login",

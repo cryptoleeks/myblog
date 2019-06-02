@@ -210,8 +210,8 @@
             dataType: "json",
             success: function(data){
                 layer.msg(data.data);
-                table.reload("blogtable", options);
-
+                //table.reload("blogtable", options);
+                window.location.reload();
             }})
     }
 

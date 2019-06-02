@@ -30,6 +30,7 @@ as
 LEFT JOIN myblog.t_blog b
 ON b.c_lable_id=l.id
 GROUP BY l.id
+ORDER BY COUNT(b.c_lable_id) DESC
 limit #{indexstart},#{limitsize}
   </select>
   <select id="getAllLable" resultType="java.util.Map">

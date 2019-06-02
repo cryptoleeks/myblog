@@ -11,14 +11,7 @@
     <link rel="stylesheet" href="../layui/css/layui.css"/>
     <script src="../layui/layui.js"></script>
 
-<script >
-    //获取封面图片
-   /* $(".editormd-enter-btn").click(function(){*/
-var btn=document.getElementsByClassName("editormd-enter-btn");
-btn.click(function(){
-        alert("点击了");
-    });
-</script>
+
 </head>
 
 <body style="background-color: #eeeeee;">
@@ -220,7 +213,7 @@ btn.click(function(){
            form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
+                //layer.msg(JSON.stringify(data.field));
                 var cover=getCookie("cover");
                 data.field.cover=cover;//添加博客封面
                 $.ajax({
@@ -388,7 +381,13 @@ btn.click(function(){
     }
 
     var sum = 0;
+    var sunInter=setInterval(function () {
+        if (sum!=0){
+            limitBQNode();
+        }
 
+    },500);
+    var inputbqname="";
     //添加标签节点
     function addCategory(bq) {
         var catetext = $("#category");
@@ -401,7 +400,7 @@ btn.click(function(){
         }
         var count = "category" + sum;
         newinput.type = "checkbox";
-        newinput.name = bq + sum + "," + inputval;
+        inputbqname=newinput.name = bq + sum + "," + inputval;
         newinput.title = catetext.val();
         newinput.checked = true;
 
@@ -431,7 +430,7 @@ btn.click(function(){
         $("#" + count).click(function () {
             catelist[0].removeChild(this);
             //var eleinputname="input[name=]"
-            catelist[0].removeChild($("input[name=" + this.id + "]"));
+            catelist[0].removeChild($("input[name=" + inputbqname+ "]"));
             sum--;
         });
         sum++;

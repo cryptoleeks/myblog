@@ -204,7 +204,7 @@
     var id="";//userid
     var bid="";//blogid
     //JavaScript代码区域
-    var uri="localhost:8080/";
+    var uri="localhost:80/";
 
     window.onload=function() {
 
@@ -410,7 +410,7 @@
             //修改密码
             form.on('submit(pswbtu)', function (data) {
                 //data.field.file = path;
-                layer.msg(JSON.stringify(data.field));
+                //layer.msg(JSON.stringify(data.field));
                 $.ajax({
                     type: "PUT",
                     url: "/user/updata/psw/"+id,
@@ -441,7 +441,7 @@
             //修改信息
             form.on('submit(formDemo)', function (data) {
                 //data.field.file = path;
-                layer.msg(JSON.stringify(data.field));
+                //layer.msg(JSON.stringify(data.field));
                 $.ajax({
                     type: "PUT",
                     url: "/user/updata/"+id,

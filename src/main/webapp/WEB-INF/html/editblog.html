@@ -116,7 +116,7 @@
 
 
 <script type="text/javascript">
-    var uri = "localhost:8080";
+    var uri = "localhost:80";
 
     var md=$("#md");
     var html=$("#html");
@@ -183,7 +183,7 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
+                //layer.msg(JSON.stringify(data.field));
                 $.ajax({
                     type: "PUT",
                     url: "/blog/"+cookieid,
@@ -443,7 +443,7 @@
 </script>
 <script>
     //JavaScript代码区域
-    var uri = "localhost:8080/";
+    var uri = "localhost:80/";
 
     window.onload = function () {
 

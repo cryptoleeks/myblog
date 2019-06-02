@@ -159,6 +159,10 @@ public class BlogController {
         String categoryselect = json.getString("categoryselect");
         String categoryselect2 = json.getString("categoryselect2");
         String cover=json.getString("cover");
+        if(StringUtils.isEmpty(cover)){
+            cover="http://localhost:8080/resources/upload/default.jpg" +
+                    "";
+        }
         String uid = null;
         //获取用户凭证
         Cookie token = CookieUtil.getCookie(request, "token");
@@ -202,9 +206,10 @@ public class BlogController {
             if (!filePath.exists()) {
                 filePath.mkdirs();
             }
-            String picadr="http://localhost:8080/resources/upload/"+attach.getOriginalFilename();
+            String filename=UUID.randomUUID().toString();
+            String picadr="http://localhost:8080/resources/upload/"+filename;
             //最终文件名
-            File realFile = new File(rootPath + File.separator + attach.getOriginalFilename());
+            File realFile = new File(rootPath + File.separator + filename);
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
             //保存博客内容临时图片路径
             CookieUtil.setCookie(response,"cover",picadr);

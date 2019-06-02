@@ -32,7 +32,7 @@
         <li class="layui-nav-item">
             <a href="/admin/lable/view">云标签管理</a>
         </li>
-        <li class="layui-nav-item layui-nav-itemed"><a href="/admin/blog/view">文章管理</a></li>
+        <li class="layui-nav-item "><a href="/admin/blog/view">文章管理</a></li>
         <li class="layui-nav-item"><a href="/admin/comment/view">评论管理</a></li>
         <li class="layui-nav-item"><a href="/admin/category/view">分类管理</a></li>
         <li class="layui-nav-item"><a href="/admin/message/view">留言管理</a></li>
@@ -105,8 +105,8 @@
             dataType: "json",
             success: function(data){
                 layer.msg(data.data);
-                table.reload("usertable", options);
-
+                //table.reload("usertable", options);
+                window.location.reload();
             }})
     }
 

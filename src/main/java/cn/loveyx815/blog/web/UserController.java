@@ -123,6 +123,10 @@ public class UserController {
         } catch (ParseException e) {
             logger.error("日期解析异常");
         }
+        if(StringUtils.isEmpty(path)){
+            path="http://loveyx815.cn/resources/upload/user/bbu.png";
+
+        }
         //  String jsonstr=request.getParameter("json");
        // JSONObject jsonObject = JSONObject.parseObject(jsonstr);
         User user=new User();
@@ -169,9 +173,10 @@ public class UserController {
             if (!filePath.exists()) {
                 filePath.mkdirs();
             }
+            String filename=UUID.randomUUID().toString();
 
             //最终文件名
-            String path=rootPath + File.separator + attach.getOriginalFilename();
+            String path=rootPath + File.separator + filename;
             File realFile = new File(path);
         try {
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
@@ -180,7 +185,7 @@ public class UserController {
         }
 //            String url=path;
             JSONObject jsonObject=new JSONObject();
-            jsonObject.put("url","http://localhost:8080/resources/upload/user/"+attach.getOriginalFilename());
+            jsonObject.put("url","http://loveyx815.cn/resources/upload/user/"+filename);
             return Utils.JSONDataReturn(jsonObject,"200");
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
            // response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"/resources/upload/" + attach.getOriginalFilename() + "\"}");

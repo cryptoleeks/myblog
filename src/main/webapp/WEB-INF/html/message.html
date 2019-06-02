@@ -132,7 +132,7 @@
 
     //JavaScript代码区域
     var uid="";
-    var uri="localhost:8080/";
+    var uri="localhost:80/";
     function getCookie (name) {
         if (document.cookie.length > 0) {
             var begin = document.cookie.indexOf(name + '=')
@@ -337,7 +337,7 @@
             var form = layui.form;
             //监听提交
             form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
+                //layer.msg(JSON.stringify(data.field));
                 if (uid==""){
                     uid="0";
                 }

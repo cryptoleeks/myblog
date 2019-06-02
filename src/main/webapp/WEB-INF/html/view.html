@@ -256,6 +256,14 @@
                         window.location.href = "/view/"+id;
                     });
                 }
+                else {
+                    layer.msg("您还未登录", {
+                        icon: 2,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        window.location.href = "/blog/login";
+                    });
+                }
             }})
     }
     $(function () {
@@ -342,7 +350,7 @@
     });
 </script>
 <script type="text/javascript">
-    var uri = "localhost:8080";
+    var uri = "localhost:80";
     $(function () {
         editormd("test-editormd", {
             width: "90%",
@@ -364,7 +372,7 @@
 
 <script>
     //JavaScript代码区域
-    var uri = "localhost:8080/";
+    var uri = "localhost:80/";
 
     window.onload = function () {
 
